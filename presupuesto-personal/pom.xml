@@ -114,16 +114,12 @@
 						</configuration>
 					</execution>
 				</executions>
-<<<<<<< Updated upstream
-			</plugin>
-=======
+
                 <configuration>
-                    <source>21</source>
-                    <target>21</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
->>>>>>> Stashed changes
 		</plugins>
 	</build>
-
 </project>

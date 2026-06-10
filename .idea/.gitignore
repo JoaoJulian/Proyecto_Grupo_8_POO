@@ -1,0 +1,22 @@
+# IntelliJ
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Maven / Gradle
+target/
+build/
+*.class
+
+# Spring Boot
+*.jar
+*.war
+
+# Variables de entorno (¡importante! no subir credenciales)
+.env
+application-local.properties
+
+# OS
+.DS_Store
+Thumbs.db
