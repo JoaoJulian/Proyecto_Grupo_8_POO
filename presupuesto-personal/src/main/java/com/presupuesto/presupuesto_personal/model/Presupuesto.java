@@ -20,16 +20,8 @@ public class Presupuesto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private Usuario usuario;
-
-    @ManyToOne
-    @JoinColumn(name = "id_categoria", nullable = false)
-    private Categoria categoria;
-
-    @Column(name = "monto_limite", nullable = false, precision = 10, scale = 2)
-    private BigDecimal montoLimite;
+    @Column(name = "monto_maximo", nullable = false)
+    private BigDecimal montoMaximo;
 
     @Column(name = "mes", nullable = false)
     private Integer mes;
@@ -37,11 +29,14 @@ public class Presupuesto {
     @Column(name = "anio", nullable = false)
     private Integer anio;
 
-    @Column(name = "fecha_creacion", nullable = false, updatable = false)
-    private LocalDateTime fechaCreacion;
+    @Column(name = "alerta_activada", nullable = false)
+    private Boolean alertaActivada = false;
 
-    @PrePersist
-    protected void onCreate() {
-        this.fechaCreacion = LocalDateTime.now();
-    }
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
+
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
 }

@@ -49,7 +49,7 @@ public class PresupuestoService {
     // Actualizar
     public Presupuesto actualizar(Long id, Presupuesto datos) {
         Presupuesto existente = buscarPorId(id);
-        existente.setMontoLimite(datos.getMontoLimite());
+        existente.setMontoMaximo(datos.getMontoMaximo());
         existente.setMes(datos.getMes());
         existente.setAnio(datos.getAnio());
         existente.setCategoria(datos.getCategoria());
