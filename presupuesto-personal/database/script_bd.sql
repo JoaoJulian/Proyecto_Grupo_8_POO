@@ -165,4 +165,4 @@ INSERT INTO bitacora (accion, entidad, descripcion, id_usuario) VALUES
                                                                     ('CREAR',      'Transaccion', 'Registro de gasto en supermercado',        1),
                                                                     ('ACTUALIZAR', 'Presupuesto', 'Ajuste de presupuesto de Alimentación',    1),
                                                                     ('CREAR',      'Categoria',   'Nueva categoría Salud creada',             2),
-                                                                    ('ELIMINAR',   'Transaccion', 'Transacción duplicada eliminada',          2);                                                                                            (1200.00, 6, 2025, 0, 1, 6);  -- Alquiler: máx S/.1200
+                                                                    ('ELIMINAR',   'Transaccion', 'Transacción duplicada eliminada',          2);                                                                                         (1200.00, 6, 2025, 0, 1, 6);  -- Alquiler: máx S/.1200

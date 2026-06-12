@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7ccf0d4d-06f7-49db-9345-19657ac339f6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/script_bd.sql" beforeDir="false" afterPath="$PROJECT_DIR$/script_bd.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +54,9 @@
   "keyToStringList": {
     "DatabaseDriversLRU": [
       "mysql_aurora"
+    ],
+    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
+      "MySQL"
     ]
   }
 }]]></component>
@@ -97,7 +99,8 @@
       <workItem from="1781038820674" duration="1617000" />
       <workItem from="1781047449774" duration="1206000" />
       <workItem from="1781048790322" duration="341000" />
-      <workItem from="1781143990345" duration="1342000" />
+      <workItem from="1781143990345" duration="1435000" />
+      <workItem from="1781232316950" duration="934000" />
     </task>
     <servers />
   </component>
