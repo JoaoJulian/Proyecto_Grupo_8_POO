@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="7ccf0d4d-06f7-49db-9345-19657ac339f6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-personal/database/script_bd.sql" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/database/script_bd.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-personal/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,38 +33,41 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "Spring Boot.PresupuestoPersonalApplication.executor": "Run",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Usuario/Downloads/Mis Archivos/Formacion Profesional/UNI/3er ciclo/Programación Orientada a Objetos/Proyecto/Presupuesto/Proyecto_Grupo_8_POO/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.repository.indices",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;Spring Boot.PresupuestoPersonalApplication.executor&quot;: &quot;Run&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Usuario/Downloads/Mis Archivos/Formacion Profesional/UNI/3er ciclo/Programación Orientada a Objetos/Proyecto/Presupuesto/Proyecto_Grupo_8_POO/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql_aurora"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql_aurora&quot;
     ],
-    "com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect": [
-      "MySQL"
+    &quot;com.intellij.ide.scratch.LRUPopupBuilder$1/SQL Dialect&quot;: [
+      &quot;MySQL&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Usuario\Downloads\Mis Archivos\Formacion Profesional\UNI\3er ciclo\Programación Orientada a Objetos\Proyecto\Presupuesto\Proyecto_Grupo_8_POO\presupuesto-personal\src\main\java\com\presupuesto\presupuesto_personal" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Usuario\Downloads\Mis Archivos\Formacion Profesional\UNI\3er ciclo\Programación Orientada a Objetos\Proyecto\Presupuesto\Proyecto_Grupo_8_POO\presupuesto-personal\database" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.presupuesto.presupuesto_personal.model" />
@@ -100,7 +105,8 @@
       <workItem from="1781047449774" duration="1206000" />
       <workItem from="1781048790322" duration="341000" />
       <workItem from="1781143990345" duration="1435000" />
-      <workItem from="1781232316950" duration="934000" />
+      <workItem from="1781232316950" duration="3713000" />
+      <workItem from="1781240003494" duration="493000" />
     </task>
     <servers />
   </component>
