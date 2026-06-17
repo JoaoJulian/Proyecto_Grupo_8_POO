@@ -1,7 +1,3 @@
--- ================================================
--- ELIMINAR Y CREAR BASE DE DATOS
--- ================================================
-
 IF DB_ID('presupuesto_personal') IS NOT NULL
 BEGIN
     ALTER DATABASE presupuesto_personal SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
