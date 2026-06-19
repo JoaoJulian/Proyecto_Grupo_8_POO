@@ -1,43 +1,51 @@
 package com.presupuesto.presupuesto_personal.controller;
 
+import com.presupuesto.presupuesto_personal.dto.UsuarioResponseDTO;
 import com.presupuesto.presupuesto_personal.model.Usuario;
-import com.presupuesto.presupuesto_personal.service.UsuarioService;
+import com.presupuesto.presupuesto_personal.model.Usuario.EstadoUsuario;
+import com.presupuesto.presupuesto_personal.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/usuarios")
 public class UsuarioController {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioRepository usuarioRepository;
 
-    // POST /api/usuarios/registro
-    @PostMapping("/registro")
-    public ResponseEntity<Usuario> registrar(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.registrar(usuario));
+    @GetMapping
+    public List<Usuario> listar() {
+        return usuarioRepository.findAll();
     }
 
-    // GET /api/usuarios/{id}
     @GetMapping("/{id}")
-    public ResponseEntity<Usuario> buscarPorId(@PathVariable Long id) {
-        return ResponseEntity.ok(usuarioService.buscarPorId(id));
+    public UsuarioResponseDTO obtener(@PathVariable Long id) {
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        return UsuarioResponseDTO.builder()
+                .id(u.getId())
+                .nombre(u.getNombre())
+                .email(u.getEmail())
+                .estado(u.getEstado())
+                .build();
     }
 
-    // GET /api/usuarios/email/{email}
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Usuario> buscarPorEmail(@PathVariable String email) {
-        return ResponseEntity.ok(usuarioService.buscarPorEmail(email));
-    }
+    // Endpoint PUT /api/usuarios/{id}/estado para activar o desactivar usuario
+    @PutMapping("/{id}/estado")
+    public UsuarioResponseDTO cambiarEstado(@PathVariable Long id,
+                                            @RequestParam EstadoUsuario estado) {
+        Usuario u = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        u.setEstado(estado);
+        usuarioRepository.save(u);
 
-    // PUT /api/usuarios/{id}
-    @PutMapping("/{id}")
-    public ResponseEntity<Usuario> actualizar(
-            @PathVariable Long id,
-            @RequestBody Usuario usuario) {
-        return ResponseEntity.ok(usuarioService.actualizar(id, usuario));
+        return UsuarioResponseDTO.builder()
+                .id(u.getId())
+                .nombre(u.getNombre())
+                .email(u.getEmail())
+                .estado(u.getEstado())
+                .build();
     }
-
 }

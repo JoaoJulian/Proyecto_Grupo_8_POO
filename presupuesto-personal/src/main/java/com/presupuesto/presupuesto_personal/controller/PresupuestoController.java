@@ -57,4 +57,11 @@ public class PresupuestoController {
         presupuestoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
+
+    // GET /api/presupuestos/{id}/verificar-alerta — Paso 4 (RF5)
+    @GetMapping("/{id}/verificar-alerta")
+    public ResponseEntity<String> verificarAlerta(@PathVariable Long id) {
+        String resultado = presupuestoService.verificarAlerta(id);
+        return ResponseEntity.ok(resultado);
+    }
 }

@@ -1,10 +1,15 @@
 package com.presupuesto.presupuesto_personal.service;
 
 import com.presupuesto.presupuesto_personal.model.Presupuesto;
+import com.presupuesto.presupuesto_personal.model.TipoTransaccion;
 import com.presupuesto.presupuesto_personal.repository.PresupuestoRepository;
+import com.presupuesto.presupuesto_personal.repository.TransaccionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +18,13 @@ public class PresupuestoService {
 
     @Autowired
     private  PresupuestoRepository presupuestoRepository;
+
+    // Paso 4: inyectar TransaccionRepository (para sumar gastos) y AlertaService (para crear alertas)
+    @Autowired
+    private TransaccionRepository transaccionRepository;
+
+    @Autowired
+    private AlertaService alertaService;
 
     // Crear presupuesto
     public Presupuesto crear(Presupuesto presupuesto) {
@@ -60,5 +72,34 @@ public class PresupuestoService {
     public void eliminar(Long id) {
         buscarPorId(id); // verifica que existe antes de eliminar
         presupuestoRepository.deleteById(id);
+    }
+
+    // Paso 4 (RF5): verificar si el gasto acumulado del mes supera el presupuesto y generar alerta
+    public String verificarAlerta(Long presupuestoId) {
+        Presupuesto presupuesto = buscarPorId(presupuestoId);
+
+        // Rango de fechas correspondiente al mes/año del presupuesto
+        YearMonth yearMonth = YearMonth.of(presupuesto.getAnio(), presupuesto.getMes());
+        LocalDate fechaInicio = yearMonth.atDay(1);
+        LocalDate fechaFin = yearMonth.atEndOfMonth();
+
+        BigDecimal totalGastado = transaccionRepository.sumarMontoPorUsuarioCategoriaYFechas(
+                presupuesto.getUsuario().getId(),
+                presupuesto.getCategoria().getId(),
+                TipoTransaccion.GASTO,
+                fechaInicio,
+                fechaFin
+        );
+
+        if (totalGastado.compareTo(presupuesto.getMontoMaximo()) > 0) {
+            presupuesto.setAlertaActivada(true);
+            presupuestoRepository.save(presupuesto);
+            alertaService.crear(presupuesto.getUsuario(), presupuesto, totalGastado);
+            return "ALERTA: Superaste tu presupuesto. Gastado: S/." + totalGastado
+                    + " / Máximo: S/." + presupuesto.getMontoMaximo();
+        }
+
+        return "OK: Dentro del presupuesto. Gastado: S/." + totalGastado
+                + " / Máximo: S/." + presupuesto.getMontoMaximo();
     }
 }

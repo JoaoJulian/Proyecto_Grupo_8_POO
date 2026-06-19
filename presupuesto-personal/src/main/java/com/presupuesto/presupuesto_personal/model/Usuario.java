@@ -1,17 +1,14 @@
 package com.presupuesto.presupuesto_personal.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
+import lombok.*;
 
 @Entity
 @Table(name = "usuario")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Usuario {
 
     @Id
@@ -27,11 +24,12 @@ public class Usuario {
     @Column(nullable = false)
     private String password;
 
-    @Column(name = "fecha_registro")
-    private LocalDateTime fechaRegistro;
+    // Paso 1: campo estado con valor por defecto ACTIVO
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private EstadoUsuario estado = EstadoUsuario.ACTIVO;
 
-    @PrePersist
-    public void antesDeGuardar() {
-        this.fechaRegistro = LocalDateTime.now();
+    public enum EstadoUsuario {
+        ACTIVO, INACTIVO
     }
 }
