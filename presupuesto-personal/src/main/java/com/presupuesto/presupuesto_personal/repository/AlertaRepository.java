@@ -7,4 +7,5 @@ import java.util.List;
 public interface AlertaRepository extends JpaRepository<Alerta, Long> {
     List<Alerta> findByUsuarioId(Long idUsuario);
     List<Alerta> findByUsuarioIdAndLeidaFalse(Long idUsuario);
+    boolean existsByPresupuestoIdAndLeidaFalse(Long presupuestoId);
 }

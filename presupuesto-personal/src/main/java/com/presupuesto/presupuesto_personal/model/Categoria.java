@@ -2,6 +2,7 @@ package com.presupuesto.presupuesto_personal.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Categoria {
 
     @Id
@@ -24,6 +26,9 @@ public class Categoria {
     private String tipo;
 
     private String descripcion;
+
+    @Column(nullable = false)
+    private Boolean activo = true;
 
     // Relación con el usuario dueño de la categoría
     @ManyToOne
