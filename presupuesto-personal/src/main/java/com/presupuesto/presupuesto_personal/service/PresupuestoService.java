@@ -113,22 +113,26 @@ public class PresupuestoService {
         List<Transaccion> transacciones = transaccionRepository
                 .findByUsuarioIdAndFechaTransaccionBetweenAndActivoTrue(idUsuario, inicio, fin);
 
-        BigDecimal totalGastado = transacciones.stream()
-                .filter(t -> t.getCategoria() != null
-                        && t.getCategoria().getId().equals(idCategoria)
-                        && t.getTipo() == TipoTransaccion.GASTO)
-                .map(Transaccion::getMonto)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal totalGastado = transaccionRepository
+                .sumarMontoPorUsuarioCategoriaYFechas(
+                        idUsuario,
+                        idCategoria,
+                        TipoTransaccion.GASTO,
+                        inicio,
+                        fin
+                );
 
         boolean superado = totalGastado.compareTo(presupuesto.getMontoMaximo()) > 0;
 
-        presupuesto.setAlertaActivada(superado);
-        presupuestoRepository.save(presupuesto);
+        if (presupuesto.getAlertaActivada() != superado) {
+            presupuesto.setAlertaActivada(superado);
+            presupuestoRepository.save(presupuesto);
+        }
 
         if (superado) {
             alertaService.crearSiNoExiste(presupuesto, totalGastado);
-            return "ALERTA: Superaste tu presupuesto. Gastado: S/." + totalGastado
-                    + " / Máximo: S/." + presupuesto.getMontoMaximo();
+            return "ALERTA: Superaste tu presupuesto. Gastado: S/." + totalGastado +
+                    " / Máximo: S/." + presupuesto.getMontoMaximo();
         }
 
         return "Dentro del presupuesto. Gastado: S/." + totalGastado

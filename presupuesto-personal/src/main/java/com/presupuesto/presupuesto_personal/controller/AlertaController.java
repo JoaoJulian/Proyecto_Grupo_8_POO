@@ -19,7 +19,7 @@ public class AlertaController {
         return ResponseEntity.ok(alertaService.listarPorUsuario(idUsuario));
     }
 
-    @PutMapping("/{id}/leida")
+    @PatchMapping("/{id}/leida")
     public ResponseEntity<AlertaResponseDTO> marcarComoLeida(@PathVariable Long id) {
         return ResponseEntity.ok(alertaService.marcarComoLeida(id));
     }

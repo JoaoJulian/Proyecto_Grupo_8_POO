@@ -42,7 +42,7 @@ public class GrupoController {
         return ResponseEntity.ok(grupoService.listarPorUsuario(idUsuario));
     }
 
-    @DeleteMapping("/{idGrupo}/salir/{idUsuario}")
+    @PatchMapping("/{idGrupo}/salir/{idUsuario}")
     public ResponseEntity<Void> salir(@PathVariable Long idGrupo, @PathVariable Long idUsuario) {
         grupoService.salirDelGrupo(idGrupo, idUsuario);
         return ResponseEntity.noContent().build();

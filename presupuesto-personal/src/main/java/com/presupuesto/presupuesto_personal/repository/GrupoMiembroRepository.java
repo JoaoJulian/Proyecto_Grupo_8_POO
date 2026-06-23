@@ -10,5 +10,6 @@ public interface GrupoMiembroRepository extends JpaRepository<GrupoMiembro, Long
     List<GrupoMiembro> findByGrupoIdAndActivoTrue(Long idGrupo);
     List<GrupoMiembro> findByUsuarioIdAndActivoTrue(Long idUsuario);
     Optional<GrupoMiembro> findByGrupoIdAndUsuarioIdAndActivoTrue(Long idGrupo, Long idUsuario);
+    Optional<GrupoMiembro> findByGrupoIdAndUsuarioId(Long idGrupo, Long idUsuario);
     boolean existsByGrupoIdAndUsuarioIdAndActivoTrue(Long idGrupo, Long idUsuario);
 }

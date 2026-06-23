@@ -7,6 +7,8 @@ import com.presupuesto.presupuesto_personal.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class GrupoService {
 
@@ -51,15 +53,32 @@ public class GrupoService {
         Usuario usuario = usuarioRepository.findByEmail(emailInvitado)
                 .orElseThrow(() -> new RuntimeException("No existe un usuario con ese email"));
 
-        Grupo grupo = grupoRepository.findById(idGrupo)
+        Grupo grupo = grupoRepository.findByIdAndActivoTrue(idGrupo)
                 .orElseThrow(() -> new RuntimeException("Grupo no encontrado"));
 
         if (!grupo.getActivo()) {
             throw new RuntimeException("El grupo está eliminado");
         }
 
-        if (grupoMiembroRepository.existsByGrupoIdAndUsuarioIdAndActivoTrue(idGrupo, usuario.getId())) {
-            throw new RuntimeException("El usuario ya pertenece a este grupo");
+        Optional<GrupoMiembro> existente = grupoMiembroRepository.findByGrupoIdAndUsuarioId(
+                        idGrupo,
+                        usuario.getId());
+
+        if (existente.isPresent()) {
+
+            GrupoMiembro miembro = existente.get();
+
+            if (miembro.getActivo()) {
+                throw new RuntimeException(
+                        "El usuario ya pertenece al grupo");
+            }
+
+            miembro.setActivo(true);
+
+            GrupoMiembro guardado =
+                    grupoMiembroRepository.save(miembro);
+
+            return toMiembroDTO(guardado);
         }
 
         GrupoMiembro miembro = GrupoMiembro.builder()
