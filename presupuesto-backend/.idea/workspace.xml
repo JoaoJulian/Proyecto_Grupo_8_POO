@@ -4,21 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7ccf0d4d-06f7-49db-9345-19657ac339f6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/AlertaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/PresupuestoRequestDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/PresupuestoResponseDTO.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Alerta.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/AlertaRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/AlertaService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/PresupuestoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/PresupuestoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/UsuarioController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Usuario.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/TransaccionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/TransaccionRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/PresupuestoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/PresupuestoService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/TransaccionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/TransaccionService.java" afterDir="false" />
-    </list>
+    <list default="true" id="7ccf0d4d-06f7-49db-9345-19657ac339f6" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -126,7 +112,7 @@
       <workItem from="1781240003494" duration="1610000" />
       <workItem from="1781644524539" duration="320000" />
       <workItem from="1781645109141" duration="946000" />
-      <workItem from="1781837376800" duration="2677000" />
+      <workItem from="1781837376800" duration="2841000" />
     </task>
     <servers />
   </component>
