@@ -1,15 +1,18 @@
 package com.presupuesto.presupuesto_personal.service;
 
-import com.presupuesto.presupuesto_personal.model.Presupuesto;
-import com.presupuesto.presupuesto_personal.model.TipoTransaccion;
+import com.presupuesto.presupuesto_personal.dto.CategoriaResponseDTO;
+import com.presupuesto.presupuesto_personal.dto.PresupuestoRequestDTO;
+import com.presupuesto.presupuesto_personal.dto.PresupuestoResponseDTO;
+import com.presupuesto.presupuesto_personal.model.*;
+import com.presupuesto.presupuesto_personal.repository.CategoriaRepository;
 import com.presupuesto.presupuesto_personal.repository.PresupuestoRepository;
 import com.presupuesto.presupuesto_personal.repository.TransaccionRepository;
+import com.presupuesto.presupuesto_personal.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.YearMonth;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,87 +22,140 @@ public class PresupuestoService {
     @Autowired
     private  PresupuestoRepository presupuestoRepository;
 
-    // Paso 4: inyectar TransaccionRepository (para sumar gastos) y AlertaService (para crear alertas)
     @Autowired
     private TransaccionRepository transaccionRepository;
 
     @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private CategoriaRepository categoriaRepository;
+
+    @Autowired
     private AlertaService alertaService;
 
-    // Crear presupuesto
-    public Presupuesto crear(Presupuesto presupuesto) {
-        // Verifica que no exista ya uno para la misma combinación
+    public PresupuestoResponseDTO crear(PresupuestoRequestDTO dto, String emailUsuarioActual) {
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuarioActual)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        Categoria categoria = categoriaRepository.findById(dto.getIdCategoria())
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
         Optional<Presupuesto> existente = presupuestoRepository
-                .findByUsuarioIdAndCategoriaIdAndMesAndAnio(
-                        presupuesto.getUsuario().getId(),
-                        presupuesto.getCategoria().getId(),
-                        presupuesto.getMes(),
-                        presupuesto.getAnio()
-                );
+                .findByUsuarioIdAndCategoriaIdAndMesAndAnioAndActivoTrue(
+                        usuario.getId(), dto.getIdCategoria(), dto.getMes(), dto.getAnio());
         if (existente.isPresent()) {
             throw new RuntimeException("Ya existe un presupuesto para esa categoría en ese mes y año.");
         }
-        return presupuestoRepository.save(presupuesto);
+
+        Presupuesto presupuesto = Presupuesto.builder()
+                .usuario(usuario)
+                .categoria(categoria)
+                .montoMaximo(dto.getMontoMaximo())
+                .mes(dto.getMes())
+                .anio(dto.getAnio())
+                .activo(true)
+                .build();
+
+        Presupuesto guardado = presupuestoRepository.save(presupuesto);
+        return toResponseDTO(guardado);
     }
 
-    // Listar por usuario
-    public List<Presupuesto> listarPorUsuario(Long usuarioId){
-        return presupuestoRepository.findByUsuarioId(usuarioId);
+    public List<PresupuestoResponseDTO> listarPorUsuario(Long usuarioId) {
+        return presupuestoRepository.findByUsuarioIdAndActivoTrue(usuarioId)
+                .stream().map(this::toResponseDTO).toList();
     }
 
-    // Listar por usuario, mes y año
-    public List<Presupuesto> listarPorUsuarioMesAnio(Long usuarioId, Integer mes, Integer anio) {
-        return presupuestoRepository.findByUsuarioIdAndMesAndAnio(usuarioId, mes, anio);
+    public List<PresupuestoResponseDTO> listarPorUsuarioMesAnio(Long usuarioId, Integer mes, Integer anio) {
+        return presupuestoRepository.findByUsuarioIdAndMesAndAnioAndActivoTrue(usuarioId, mes, anio)
+                .stream().map(this::toResponseDTO).toList();
     }
 
-    // Buscar por ID
-    public Presupuesto buscarPorId(Long id) {
-        return presupuestoRepository.findById(id)
+    public PresupuestoResponseDTO buscarPorId(Long id) {
+        return toResponseDTO(buscarEntidadPorId(id));
+    }
+
+    private Presupuesto buscarEntidadPorId(Long id) {
+        return presupuestoRepository.findByIdAndActivoTrue(id)
                 .orElseThrow(() -> new RuntimeException("Presupuesto no encontrado con id: " + id));
     }
 
-    // Actualizar
-    public Presupuesto actualizar(Long id, Presupuesto datos) {
-        Presupuesto existente = buscarPorId(id);
-        existente.setMontoMaximo(datos.getMontoMaximo());
-        existente.setMes(datos.getMes());
-        existente.setAnio(datos.getAnio());
-        existente.setCategoria(datos.getCategoria());
-        return presupuestoRepository.save(existente);
+    public PresupuestoResponseDTO actualizar(Long id, PresupuestoRequestDTO dto) {
+        Presupuesto existente = buscarEntidadPorId(id);
+
+        Categoria categoria = categoriaRepository.findById(dto.getIdCategoria())
+                .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+
+        existente.setMontoMaximo(dto.getMontoMaximo());
+        existente.setMes(dto.getMes());
+        existente.setAnio(dto.getAnio());
+        existente.setCategoria(categoria);
+
+        Presupuesto guardado = presupuestoRepository.save(existente);
+        return toResponseDTO(guardado);
     }
 
-    // Eliminar
     public void eliminar(Long id) {
-        buscarPorId(id); // verifica que existe antes de eliminar
-        presupuestoRepository.deleteById(id);
+        Presupuesto presupuesto = buscarEntidadPorId(id);
+        presupuesto.setActivo(false);
+        presupuestoRepository.save(presupuesto);
     }
 
-    // Paso 4 (RF5): verificar si el gasto acumulado del mes supera el presupuesto y generar alerta
-    public String verificarAlerta(Long presupuestoId) {
-        Presupuesto presupuesto = buscarPorId(presupuestoId);
+    // Verificar si el gasto del mes superó el presupuesto (RF5)
+    public String verificarAlerta(Long idUsuario, Long idCategoria, Integer mes, Integer anio) {
+        Presupuesto presupuesto = presupuestoRepository
+                .findByUsuarioIdAndCategoriaIdAndMesAndAnioAndActivoTrue(idUsuario, idCategoria, mes, anio)
+                .orElseThrow(() -> new RuntimeException("No hay presupuesto definido para esa categoría en ese mes"));
 
-        // Rango de fechas correspondiente al mes/año del presupuesto
-        YearMonth yearMonth = YearMonth.of(presupuesto.getAnio(), presupuesto.getMes());
-        LocalDate fechaInicio = yearMonth.atDay(1);
-        LocalDate fechaFin = yearMonth.atEndOfMonth();
+        LocalDate inicio = LocalDate.of(anio, mes, 1);
+        LocalDate fin = inicio.withDayOfMonth(inicio.lengthOfMonth());
 
-        BigDecimal totalGastado = transaccionRepository.sumarMontoPorUsuarioCategoriaYFechas(
-                presupuesto.getUsuario().getId(),
-                presupuesto.getCategoria().getId(),
-                TipoTransaccion.GASTO,
-                fechaInicio,
-                fechaFin
-        );
+        List<Transaccion> transacciones = transaccionRepository
+                .findByUsuarioIdAndFechaTransaccionBetweenAndActivoTrue(idUsuario, inicio, fin);
 
-        if (totalGastado.compareTo(presupuesto.getMontoMaximo()) > 0) {
-            presupuesto.setAlertaActivada(true);
+        BigDecimal totalGastado = transaccionRepository
+                .sumarMontoPorUsuarioCategoriaYFechas(
+                        idUsuario,
+                        idCategoria,
+                        TipoTransaccion.GASTO,
+                        inicio,
+                        fin
+                );
+
+        boolean superado = totalGastado.compareTo(presupuesto.getMontoMaximo()) > 0;
+
+        if (presupuesto.getAlertaActivada() != superado) {
+            presupuesto.setAlertaActivada(superado);
             presupuestoRepository.save(presupuesto);
-            alertaService.crear(presupuesto.getUsuario(), presupuesto, totalGastado);
-            return "ALERTA: Superaste tu presupuesto. Gastado: S/." + totalGastado
-                    + " / Máximo: S/." + presupuesto.getMontoMaximo();
         }
 
-        return "OK: Dentro del presupuesto. Gastado: S/." + totalGastado
+        if (superado) {
+            alertaService.crearSiNoExiste(presupuesto, totalGastado);
+            return "ALERTA: Superaste tu presupuesto. Gastado: S/." + totalGastado +
+                    " / Máximo: S/." + presupuesto.getMontoMaximo();
+        }
+
+        return "Dentro del presupuesto. Gastado: S/." + totalGastado
                 + " / Máximo: S/." + presupuesto.getMontoMaximo();
+    }
+
+    private PresupuestoResponseDTO toResponseDTO(Presupuesto p) {
+        CategoriaResponseDTO categoriaDTO = CategoriaResponseDTO.builder()
+                .id(p.getCategoria().getId())
+                .nombre(p.getCategoria().getNombre())
+                .tipo(p.getCategoria().getTipo())
+                .descripcion(p.getCategoria().getDescripcion())
+                .idUsuario(p.getCategoria().getUsuario().getId())
+                .build();
+
+        return PresupuestoResponseDTO.builder()
+                .id(p.getId())
+                .montoMaximo(p.getMontoMaximo())
+                .mes(p.getMes())
+                .anio(p.getAnio())
+                .alertaActivada(p.getAlertaActivada())
+                .idUsuario(p.getUsuario().getId())
+                .categoria(categoriaDTO)
+                .build();
     }
 }

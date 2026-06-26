@@ -10,18 +10,19 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface TransaccionRepository extends JpaRepository<Transaccion, Long> {
 
     // Buscar todas las transacciones de un usuario
-    List<Transaccion> findByUsuarioId(Long idUsuario);
+    List<Transaccion> findByUsuarioIdAndActivoTrue(Long idUsuario);
 
     // Buscar por usuario y tipo (ahora usa el enum)
-    List<Transaccion> findByUsuarioIdAndTipo(Long idUsuario, TipoTransaccion tipo);
+    List<Transaccion> findByUsuarioIdAndTipoAndActivoTrue(Long idUsuario, TipoTransaccion tipo);
 
     // Buscar por usuario en un rango de fechas
-    List<Transaccion> findByUsuarioIdAndFechaTransaccionBetween(
+    List<Transaccion> findByUsuarioIdAndFechaTransaccionBetweenAndActivoTrue(
             Long idUsuario,
             LocalDate fechaInicio,
             LocalDate fechaFin
@@ -32,7 +33,8 @@ public interface TransaccionRepository extends JpaRepository<Transaccion, Long> 
             "WHERE t.usuario.id = :idUsuario " +
             "AND t.categoria.id = :idCategoria " +
             "AND t.tipo = :tipo " +
-            "AND t.fechaTransaccion BETWEEN :fechaInicio AND :fechaFin")
+            "AND t.fechaTransaccion BETWEEN :fechaInicio AND :fechaFin " +
+            "AND t.activo = true")
     BigDecimal sumarMontoPorUsuarioCategoriaYFechas(
             @Param("idUsuario") Long idUsuario,
             @Param("idCategoria") Long idCategoria,
@@ -40,4 +42,6 @@ public interface TransaccionRepository extends JpaRepository<Transaccion, Long> 
             @Param("fechaInicio") LocalDate fechaInicio,
             @Param("fechaFin") LocalDate fechaFin
     );
+
+    Optional<Transaccion> findByIdAndActivoTrue(Long id);
 }
