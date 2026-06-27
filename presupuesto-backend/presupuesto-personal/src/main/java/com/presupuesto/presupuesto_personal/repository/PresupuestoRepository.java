@@ -10,13 +10,15 @@ import java.util.Optional;
 @Repository
 public interface PresupuestoRepository  extends JpaRepository<Presupuesto, Long> {
     // Listar todos los presupuestos de un usuario
-    List<Presupuesto> findByUsuarioId(Long usuarioId);
+    List<Presupuesto> findByUsuarioIdAndActivoTrue(Long usuarioId);
 
     // Buscar presupuesto específico por usuario + categoría + mes + año (para RF5)
-    Optional<Presupuesto> findByUsuarioIdAndCategoriaIdAndMesAndAnio(
+    Optional<Presupuesto> findByUsuarioIdAndCategoriaIdAndMesAndAnioAndActivoTrue(
             Long usuarioId, Long categoriaId, Integer mes, Integer anio);
 
     // Listar presupuestos de un usuario en un mes y año específico
-    List<Presupuesto> findByUsuarioIdAndMesAndAnio(
+    List<Presupuesto> findByUsuarioIdAndMesAndAnioAndActivoTrue(
             Long usuarioId, Integer mes, Integer anio);
+
+    Optional<Presupuesto> findByIdAndActivoTrue(Long id);
 }

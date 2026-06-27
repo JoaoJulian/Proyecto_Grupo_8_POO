@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="4ef72565-9da6-421a-8a68-6cb98f7e3647" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/AuthController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/GrupoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/AlertaResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/BitacoraResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/CategoriaRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/CategoriaResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/CategoriaUpdateDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/GrupoMiembroResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/GrupoRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/GrupoResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/InvitacionRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/LoginRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/LoginResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/TransaccionRequestDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/TransaccionResponseDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/UsuarioUpdateDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Grupo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/GrupoMiembro.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/GrupoMiembroRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/GrupoRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/security/JwtAuthFilter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/security/JwtUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/GrupoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/postman/collections/Presupuesto_Personal.postman_collection.json" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/postman/collections/Presupuesto_Personal.postman_collection.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/postman/globals/workspace.globals.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/postman/globals/workspace.globals.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/HELP.md" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/HELP.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/database/script_bd.sql" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/database/script_bd.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/mvnw" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/mvnw" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/mvnw.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/PresupuestoPersonalApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/PresupuestoPersonalApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/config/CorsConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/config/CorsConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/config/SecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/AlertaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/AlertaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/BitacoraController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/BitacoraController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/CategoriaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/CategoriaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/PresupuestoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/PresupuestoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/ReporteController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/ReporteController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/TransaccionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/TransaccionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/UsuarioController.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/controller/UsuarioController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/PresupuestoRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/PresupuestoRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/PresupuestoResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/PresupuestoResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/UsuarioRequestDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/UsuarioRequestDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/UsuarioResponseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/dto/UsuarioResponseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/exception/RecursoNoEncontradoException.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/exception/RecursoNoEncontradoException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Alerta.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Alerta.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Bitacora.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Bitacora.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Categoria.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Categoria.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Presupuesto.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Presupuesto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/TipoTransaccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/TipoTransaccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Transaccion.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Transaccion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Usuario.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/model/Usuario.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/AlertaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/AlertaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/BitacoraRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/BitacoraRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/CategoriaRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/CategoriaRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/PresupuestoRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/PresupuestoRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/TransaccionRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/TransaccionRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/UsuarioRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/repository/UsuarioRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/AlertaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/AlertaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/BitacoraService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/BitacoraService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/CategoriaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/CategoriaService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/PresupuestoService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/PresupuestoService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/ReporteService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/ReporteService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/TransaccionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/TransaccionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/UsuarioService.java" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/java/com/presupuesto/presupuesto_personal/service/UsuarioService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/config/SecurityConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/config/SecurityConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/AlertaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/AlertaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/BitacoraController.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/BitacoraController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/CategoriaController.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/CategoriaController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/PresupuestoController.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/PresupuestoController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/TransaccionController.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/TransaccionController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/UsuarioController.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/controller/UsuarioController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/dto/PresupuestoRequestDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/dto/PresupuestoRequestDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/dto/PresupuestoResponseDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/dto/PresupuestoResponseDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Categoria.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Categoria.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Presupuesto.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Presupuesto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Transaccion.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Transaccion.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Usuario.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/model/Usuario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/AlertaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/AlertaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/CategoriaRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/CategoriaRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/PresupuestoRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/PresupuestoRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/TransaccionRepository.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/repository/TransaccionRepository.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/AlertaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/AlertaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/BitacoraService.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/BitacoraService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/CategoriaService.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/CategoriaService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/PresupuestoService.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/PresupuestoService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/ReporteService.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/ReporteService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/TransaccionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/TransaccionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/UsuarioService.class" beforeDir="false" afterPath="$PROJECT_DIR$/presupuesto-backend/presupuesto-personal/target/classes/com/presupuesto/presupuesto_personal/service/UsuarioService.class" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "customColor": "",
+  "associatedIndex": 5
+}]]></component>
+  <component name="ProjectId" id="3FjGkgsVV0mtot2OhbTXbTzBhxR" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.PresupuestoPersonalApplication.executor": "Run",
+    "git-widget-placeholder": "feature/presupuestos",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/UNI/POO/Proyecto_Grupo_8_POO/presupuesto-backend",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\UNI\POO\Proyecto_Grupo_8_POO\presupuesto-backend" />
+      <recent name="D:\UNI\POO\Proyecto_Grupo_8_POO" />
+      <recent name="D:\UNI\POO\Proyecto_Grupo_8_POO\presupuesto-backend\presupuesto-personal" />
+    </key>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.240" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="4ef72565-9da6-421a-8a68-6cb98f7e3647" name="Changes" comment="" />
+      <created>1782581210878</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1782581210878</updated>
+    </task>
+    <servers />
+  </component>
+</project>

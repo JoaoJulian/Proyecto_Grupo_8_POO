@@ -3,6 +3,8 @@ package com.presupuesto.presupuesto_personal.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(name = "usuario")
 @Data
@@ -25,9 +27,18 @@ public class Usuario {
     private String password;
 
     // Paso 1: campo estado con valor por defecto ACTIVO
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private EstadoUsuario estado = EstadoUsuario.ACTIVO;
+
+    @Column(name = "fecha_registro", nullable = false, updatable = false)
+    private LocalDateTime fechaRegistro;
+
+    @PrePersist
+    protected void onCreate() {
+        this.fechaRegistro = LocalDateTime.now();
+    }
 
     public enum EstadoUsuario {
         ACTIVO, INACTIVO

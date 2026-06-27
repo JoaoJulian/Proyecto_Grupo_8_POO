@@ -25,7 +25,7 @@ public class ReporteService {
         LocalDate fin = inicio.withDayOfMonth(inicio.lengthOfMonth());
 
         List<Transaccion> transacciones = transaccionRepository
-                .findByUsuarioIdAndFechaTransaccionBetween(idUsuario, inicio, fin);
+                .findByUsuarioIdAndFechaTransaccionBetweenAndActivoTrue(idUsuario, inicio, fin);
 
         BigDecimal totalIngresos = transacciones.stream()
                 .filter(t -> t.getTipo() == TipoTransaccion.INGRESO)

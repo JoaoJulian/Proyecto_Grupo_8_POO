@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 
 // ============================================================
 // MOCK DATA — reemplaza esto cuando B termine los servicios
@@ -473,6 +474,7 @@ export default function PresupuestosAlertas() {
   const [modalAbierto, setModalAbierto] = useState(false);
   const [presupuestoEditar, setPresupuestoEditar] = useState(null);
   const [notificacion, setNotificacion] = useState(null); // { tipo: "exito"|"error", texto }
+  const { logout } = useAuth();
 
   function mostrarNotificacion(tipo, texto) {
     setNotificacion({ tipo, texto });
@@ -646,6 +648,15 @@ export default function PresupuestosAlertas() {
             {formatMes(mesActual, anioActual)} · {presupuestosMesActual.length} presupuestos activos
           </p>
         </div>
+        <button
+          onClick={logout}
+          style={{
+            padding: "9px 18px", borderRadius: 8, cursor: "pointer", fontSize: 14,
+            background: "none", color: "var(--text)", border: "1px solid var(--border)",
+          }}
+        >
+          Cerrar sesión
+        </button>
         <button
           onClick={() => { setPresupuestoEditar(null); setModalAbierto(true); }}
           style={{
