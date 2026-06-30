@@ -26,7 +26,9 @@ CREATE TABLE usuario (
     email VARCHAR(150) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     estado VARCHAR(20) NOT NULL DEFAULT 'ACTIVO',
-    fecha_registro DATETIME DEFAULT GETDATE()
+    fecha_registro DATETIME DEFAULT GETDATE(),
+    reset_token VARCHAR(255) NULL,
+    reset_token_expiracion DATETIME NULL
 );
 GO
 

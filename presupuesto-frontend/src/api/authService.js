@@ -10,4 +10,14 @@ export const authService = {
     const response = await api.post("/auth/registro", { nombre, email, password });
     return response.data;
   },
+
+  solicitarRecuperacion: async (email) => {
+      const response = await api.post("/auth/recuperar", { email });
+      return response.data;
+  },
+
+  resetearPassword: async (email, codigo, nuevaPassword) => {
+      const response = await api.post("/auth/reset-password", { email, codigo, nuevaPassword });
+      return response.data;
+  },
 };

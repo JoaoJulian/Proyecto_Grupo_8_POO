@@ -7,12 +7,15 @@ import com.presupuesto.presupuesto_personal.dto.UsuarioResponseDTO;
 import com.presupuesto.presupuesto_personal.model.Usuario;
 import com.presupuesto.presupuesto_personal.repository.UsuarioRepository;
 import com.presupuesto.presupuesto_personal.security.JwtUtils;
+import com.presupuesto.presupuesto_personal.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -22,6 +25,8 @@ public class AuthController {
     @Autowired private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtUtils jwtUtils;
+    @Autowired
+    private UsuarioService usuarioService;
 
     @PostMapping("/registro")
     public UsuarioResponseDTO registro(@RequestBody UsuarioRequestDTO request) {
@@ -64,5 +69,29 @@ public class AuthController {
                 usuario.getNombre(),
                 usuario.getEmail()
         );
+    }
+
+    @PostMapping("/recuperar")
+    public ResponseEntity<String> solicitarRecuperacion(@RequestBody Map<String, String> body) {
+        try {
+            usuarioService.solicitarRecuperacion(body.get("email"));
+            return ResponseEntity.ok("Código de recuperación enviado al correo.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetearPassword(@RequestBody Map<String, String> body) {
+        try {
+            usuarioService.resetearPassword(
+                    body.get("email"),
+                    body.get("codigo"),
+                    body.get("nuevaPassword")
+            );
+            return ResponseEntity.ok("Contraseña actualizada correctamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

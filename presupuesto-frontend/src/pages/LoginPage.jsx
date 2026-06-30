@@ -78,6 +78,12 @@ export default function LoginPage() {
           >
             {cargando ? "Iniciando sesión..." : "Iniciar sesión"}
           </button>
+
+          <p className="text-muted" style={{ textAlign: "right", marginTop: -8 }}>
+            <Link to="/recuperar" className="text-accent" style={{ textDecoration: "none", fontSize: 13 }}>
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </p>
         </form>
 
         <p className="text-muted" style={{ textAlign: "center", marginTop: "1.5rem" }}>
