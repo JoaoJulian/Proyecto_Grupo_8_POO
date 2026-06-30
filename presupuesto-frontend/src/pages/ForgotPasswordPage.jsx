@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { authService } from "../api/authService";
+import { authService } from "../services/authService";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");

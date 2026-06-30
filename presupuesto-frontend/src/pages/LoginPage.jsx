@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { authService } from "../api/authService";
+import { authService } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
