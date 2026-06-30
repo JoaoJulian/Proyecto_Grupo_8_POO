@@ -29,6 +29,7 @@ public class Presupuesto {
     @Column(name = "anio", nullable = false)
     private Integer anio;
 
+    @Builder.Default
     @Column(name = "alerta_activada", nullable = false)
     private Boolean alertaActivada = false;
 
@@ -39,4 +40,7 @@ public class Presupuesto {
     @ManyToOne
     @JoinColumn(name = "id_categoria", nullable = false)
     private Categoria categoria;
+
+    @Column(nullable = false)
+    private Boolean activo = true;
 }
