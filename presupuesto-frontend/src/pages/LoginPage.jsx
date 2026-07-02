@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { authService } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -79,11 +80,46 @@ export default function LoginPage() {
             {cargando ? "Iniciando sesión..." : "Iniciar sesión"}
           </button>
 
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              margin: "16px 0"
+            }}
+          >
+            <hr style={{ flex: 1 }} />
+            <span style={{ margin: "0 10px", color: "#777" }}>o</span>
+            <hr style={{ flex: 1 }} />
+          </div>
+
+          <GoogleLogin
+              onSuccess={async (credentialResponse) => {
+                  try {
+
+                      const data = await authService.loginGoogle(
+                          credentialResponse.credential
+                      );
+
+                      login(data);
+
+                      navigate("/");
+
+                  } catch (error) {
+                      console.error(error);
+                      alert("Error al iniciar sesión con Google");
+                  }
+              }}
+              onError={() => {
+                  alert("Error al iniciar sesión con Google");
+              }}
+          />
+
           <p className="text-muted" style={{ textAlign: "right", marginTop: -8 }}>
             <Link to="/recuperar" className="text-accent" style={{ textDecoration: "none", fontSize: 13 }}>
               ¿Olvidaste tu contraseña?
             </Link>
           </p>
+
         </form>
 
         <p className="text-muted" style={{ textAlign: "center", marginTop: "1.5rem" }}>

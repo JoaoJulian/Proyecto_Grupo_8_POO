@@ -1,12 +1,10 @@
 package com.presupuesto.presupuesto_personal.controller;
 
-import com.presupuesto.presupuesto_personal.dto.LoginRequestDTO;
-import com.presupuesto.presupuesto_personal.dto.LoginResponseDTO;
-import com.presupuesto.presupuesto_personal.dto.UsuarioRequestDTO;
-import com.presupuesto.presupuesto_personal.dto.UsuarioResponseDTO;
+import com.presupuesto.presupuesto_personal.dto.*;
 import com.presupuesto.presupuesto_personal.model.Usuario;
 import com.presupuesto.presupuesto_personal.repository.UsuarioRepository;
 import com.presupuesto.presupuesto_personal.security.JwtUtils;
+import com.presupuesto.presupuesto_personal.service.GoogleAuthService;
 import com.presupuesto.presupuesto_personal.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -69,6 +67,14 @@ public class AuthController {
                 usuario.getNombre(),
                 usuario.getEmail()
         );
+    }
+
+    @Autowired
+    private GoogleAuthService googleAuthService;
+
+    @PostMapping("/google")
+    public LoginResponseDTO loginGoogle(@RequestBody GoogleLoginRequestDTO request) {
+        return googleAuthService.loginConGoogle(request.getCredential());
     }
 
     @PostMapping("/recuperar")
