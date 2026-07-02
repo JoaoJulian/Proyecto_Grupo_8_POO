@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class PresupuestoResponseDTO {
     private Long id;
     private BigDecimal montoMaximo;
+    private BigDecimal gastoActual;
     private Integer mes;
     private Integer anio;
     private boolean alertaActivada;

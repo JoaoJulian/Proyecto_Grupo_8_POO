@@ -248,53 +248,53 @@ GO
 INSERT INTO transaccion
 (monto, tipo, descripcion, fecha_transaccion, id_usuario, id_categoria, activo)
 VALUES
-(3500.00, 'INGRESO', 'Sueldo Junio', '2025-06-01', 1, 1, 1),
-(800.00, 'INGRESO', 'Proyecto web freelance', '2025-06-05', 1, 2, 1),
-(250.00, 'GASTO', 'Supermercado semana 1', '2025-06-03', 1, 3, 1),
-(280.00, 'GASTO', 'Supermercado semana 2', '2025-06-10', 1, 3, 1),
-(45.00, 'GASTO', 'Pasajes semanales', '2025-06-07', 1, 4, 1),
-(120.00, 'GASTO', 'Cena con amigos', '2025-06-08', 1, 5, 1),
-(1200.00, 'GASTO', 'Alquiler Junio', '2025-06-01', 1, 6, 1),
-(3500.00, 'INGRESO', 'Sueldo Mayo', '2025-05-01', 1, 1, 1),
-(300.00, 'GASTO', 'Supermercado Mayo', '2025-05-10', 1, 3, 1),
-(60.00, 'GASTO', 'Netflix y Spotify', '2025-05-15', 1, 5, 1);
+(3500.00, 'INGRESO', 'Sueldo Junio', '2026-06-01', 1, 1, 1),
+(800.00, 'INGRESO', 'Proyecto web freelance', '2026-06-05', 1, 2, 1),
+(250.00, 'GASTO', 'Supermercado semana 1', '2026-06-03', 1, 3, 1),
+(280.00, 'GASTO', 'Supermercado semana 2', '2026-06-10', 1, 3, 1),
+(45.00, 'GASTO', 'Pasajes semanales', '2026-06-07', 1, 4, 1),
+(120.00, 'GASTO', 'Cena con amigos', '2026-06-08', 1, 5, 1),
+(1200.00, 'GASTO', 'Alquiler Junio', '2026-06-01', 1, 6, 1),
+(3500.00, 'INGRESO', 'Sueldo Mayo', '2026-05-01', 1, 1, 1),
+(300.00, 'GASTO', 'Supermercado Mayo', '2026-05-10', 1, 3, 1),
+(60.00, 'GASTO', 'Netflix y Spotify', '2026-05-15', 1, 5, 1);
 GO
 
 -- Transacciones de Ana (id_usuario = 2)
 INSERT INTO transaccion
 (monto, tipo, descripcion, fecha_transaccion, id_usuario, id_categoria, activo)
 VALUES
-(2800.00, 'INGRESO', 'Salario Junio', '2025-06-01', 2, 7, 1),
-(180.00, 'GASTO', 'Compras supermercado', '2025-06-05', 2, 8, 1),
-(95.00, 'GASTO', 'Consulta médica', '2025-06-12', 2, 9, 1),
-(150.00, 'GASTO', 'Curso de inglés', '2025-06-15', 2, 10, 1),
-(2800.00, 'INGRESO', 'Salario Mayo', '2025-05-01', 2, 7, 1);
+(2800.00, 'INGRESO', 'Salario Junio', '2026-06-01', 2, 7, 1),
+(180.00, 'GASTO', 'Compras supermercado', '2026-06-05', 2, 8, 1),
+(95.00, 'GASTO', 'Consulta médica', '2026-06-12', 2, 9, 1),
+(150.00, 'GASTO', 'Curso de inglés', '2026-06-15', 2, 10, 1),
+(2800.00, 'INGRESO', 'Salario Mayo', '2026-05-01', 2, 7, 1);
 GO
 
 -- Transacciones de Luis (id_usuario = 3)
 INSERT INTO transaccion
 (monto, tipo, descripcion, fecha_transaccion, id_usuario, id_categoria, activo)
 VALUES
-(2500.00, 'INGRESO', 'Sueldo Junio', '2025-06-01', 3, 11, 1),
-(220.00, 'GASTO', 'Mercado mensual', '2025-06-04', 3, 12, 1),
-(80.00, 'GASTO', 'Pasajes', '2025-06-06', 3, 13, 1);
+(2500.00, 'INGRESO', 'Sueldo Junio', '2026-06-01', 3, 11, 1),
+(220.00, 'GASTO', 'Mercado mensual', '2026-06-04', 3, 12, 1),
+(80.00, 'GASTO', 'Pasajes', '2026-06-06', 3, 13, 1);
 GO
 
 -- Transacciones de Carla (id_usuario = 4)
 INSERT INTO transaccion
 (monto, tipo, descripcion, fecha_transaccion, id_usuario, id_categoria, activo)
 VALUES
-(3000.00, 'INGRESO', 'Sueldo Junio', '2025-06-01', 4, 14, 1),
-(310.00, 'GASTO', 'Compras del mes', '2025-06-09', 4, 15, 1),
-(140.00, 'GASTO', 'Cine y salidas', '2025-06-14', 4, 16, 1);
+(3000.00, 'INGRESO', 'Sueldo Junio', '2026-06-01', 4, 14, 1),
+(310.00, 'GASTO', 'Compras del mes', '2026-06-09', 4, 15, 1),
+(140.00, 'GASTO', 'Cine y salidas', '2026-06-14', 4, 16, 1);
 GO
 
 -- Transacciones de Pedro (id_usuario = 5)
 INSERT INTO transaccion
 (monto, tipo, descripcion, fecha_transaccion, id_usuario, id_categoria, activo)
 VALUES
-(2200.00, 'INGRESO', 'Sueldo Junio', '2025-06-01', 5, 17, 1),
-(900.00, 'GASTO', 'Renta Junio', '2025-06-01', 5, 18, 1);
+(2200.00, 'INGRESO', 'Sueldo Junio', '2026-06-01', 5, 17, 1),
+(900.00, 'GASTO', 'Renta Junio', '2026-06-01', 5, 18, 1);
 GO
 
 -- Presupuestos de Juan
