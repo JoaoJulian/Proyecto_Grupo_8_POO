@@ -27,8 +27,10 @@ export const transaccionService = {
         return api.put(`/transacciones/${id}`, data);
     },
 
+    // El backend hace borrado lógico (desactivar), no DELETE real.
+    // Antes: api.delete(`/transacciones/${id}`)  -> 404/405, el backend no expone DELETE
     eliminar(id) {
-        return api.delete(`/transacciones/${id}`);
+        return api.patch(`/transacciones/${id}/desactivar`);
     }
 
 };
