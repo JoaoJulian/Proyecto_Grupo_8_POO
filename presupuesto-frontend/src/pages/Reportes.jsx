@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
 import {
   PieChart,
   Pie,
@@ -14,40 +13,76 @@ import {
   CartesianGrid,
 } from "recharts";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+import { reporteService } from "../services/reporteService";
+import { useAuth } from "../context/useAuth";
+
+const COLORS = ["#27AE60", "#E74C3C", "#2E86C1", "#F39C12"];
 
 function Reportes() {
+  const { usuario } = useAuth();
 
-  const [mes, setMes] = useState(6);
-  const [anio, setAnio] = useState(2025);
+  const [mes, setMes] = useState(new Date().getMonth() + 1);
+  const [anio, setAnio] = useState(new Date().getFullYear());
 
-  // DATOS DE PRUEBA
-  const datosCategorias = [
-    { name: "Alimentación", value: 530 },
-    { name: "Transporte", value: 45 },
-    { name: "Entretenimiento", value: 120 },
-    { name: "Alquiler", value: 1200 },
-  ];
+  const [loading, setLoading] = useState(false);
+  const [datos, setDatos] = useState(null);
+
+  const handleBuscar = async () => {
+    if (!usuario) return;
+
+    try {
+      setLoading(true);
+
+      const res = await reporteService.obtenerMensual(
+        usuario.id,
+        mes,
+        anio
+      );
+
+      setDatos(res.data);
+    } catch (error) {
+      console.error("Error al obtener reporte:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (usuario) {
+      handleBuscar();
+    }
+  }, [usuario]);
+
+  const ingresos = datos?.total_ingresos ?? 0;
+  const gastos = datos?.total_gastos ?? 0;
+  const balance = datos?.saldo_neto ?? 0;
+
+  const datosCategorias =
+    datos?.gastos_por_categoria?.map((c) => ({
+      name: c.nombre,
+      value: c.totalGastado,
+    })) ?? [];
 
   const balanceData = [
-    { name: "Ingresos", monto: 4300 },
-    { name: "Gastos", monto: 1895 },
+    {
+      name: "Ingresos",
+      monto: ingresos,
+    },
+    {
+      name: "Gastos",
+      monto: gastos,
+    },
   ];
-
-  const ingresos = 4300;
-  const gastos = 1895;
-  const balance = ingresos - gastos;
 
   return (
     <div
       style={{
         padding: "30px",
         fontFamily: "Arial",
-        backgroundColor: "#f4f6f9",
+        backgroundColor: "var(--surface-1)",
         minHeight: "100vh",
       }}
     >
-
       <h1 style={{ marginBottom: "25px" }}>
         Módulo de Reportes y Gráficos
       </h1>
@@ -63,7 +98,7 @@ function Reportes() {
         <input
           type="number"
           value={mes}
-          onChange={(e) => setMes(e.target.value)}
+          onChange={(e) => setMes(Number(e.target.value))}
           placeholder="Mes"
           style={{
             padding: "10px",
@@ -75,7 +110,7 @@ function Reportes() {
         <input
           type="number"
           value={anio}
-          onChange={(e) => setAnio(e.target.value)}
+          onChange={(e) => setAnio(Number(e.target.value))}
           placeholder="Año"
           style={{
             padding: "10px",
@@ -85,16 +120,17 @@ function Reportes() {
         />
 
         <button
+          onClick={handleBuscar}
           style={{
             padding: "10px 20px",
             border: "none",
             borderRadius: "8px",
-            backgroundColor: "#1976d2",
+            backgroundColor: "var(--fill-accent)",
             color: "white",
             cursor: "pointer",
           }}
         >
-          Buscar
+          {loading ? "Buscando..." : "Buscar"}
         </button>
       </div>
 
@@ -107,7 +143,6 @@ function Reportes() {
           flexWrap: "wrap",
         }}
       >
-
         <div style={cardStyle}>
           <h3>Ingresos</h3>
           <h2>S/ {ingresos}</h2>
@@ -122,9 +157,7 @@ function Reportes() {
           <h3>Balance</h3>
           <h2>S/ {balance}</h2>
         </div>
-
       </div>
-
       {/* GRAFICOS */}
       <div
         style={{
@@ -133,14 +166,12 @@ function Reportes() {
           flexWrap: "wrap",
         }}
       >
-
         {/* PIE CHART */}
         <div style={chartContainer}>
           <h2>Gastos por Categoría</h2>
 
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
-
               <Pie
                 data={datosCategorias}
                 dataKey="value"
@@ -158,7 +189,6 @@ function Reportes() {
 
               <Tooltip />
               <Legend />
-
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -169,7 +199,6 @@ function Reportes() {
 
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={balanceData}>
-
               <CartesianGrid strokeDasharray="3 3" />
 
               <XAxis dataKey="name" />
@@ -179,25 +208,22 @@ function Reportes() {
 
               <Bar
                 dataKey="monto"
-                fill="#1976d2"
+                fill="#2E86C1"
               />
-
             </BarChart>
           </ResponsiveContainer>
         </div>
-
       </div>
 
       {/* TABLA */}
       <div
         style={{
           marginTop: "40px",
-          backgroundColor: "white",
+          backgroundColor: "var(--surface-0)",
           padding: "20px",
           borderRadius: "12px",
         }}
       >
-
         <h2>Detalle de Transacciones</h2>
 
         <table
@@ -207,7 +233,12 @@ function Reportes() {
           }}
         >
           <thead>
-            <tr style={{ backgroundColor: "#1976d2", color: "white" }}>
+            <tr
+              style={{
+                backgroundColor: "var(--fill-accent)",
+                color: "white",
+              }}
+            >
               <th style={thStyle}>Categoría</th>
               <th style={thStyle}>Monto</th>
               <th style={thStyle}>Tipo</th>
@@ -215,35 +246,36 @@ function Reportes() {
           </thead>
 
           <tbody>
-
-            <tr>
-              <td style={tdStyle}>Alimentación</td>
-              <td style={tdStyle}>S/ 530</td>
-              <td style={tdStyle}>GASTO</td>
-            </tr>
-
-            <tr>
-              <td style={tdStyle}>Transporte</td>
-              <td style={tdStyle}>S/ 45</td>
-              <td style={tdStyle}>GASTO</td>
-            </tr>
-
-            <tr>
-              <td style={tdStyle}>Sueldo</td>
-              <td style={tdStyle}>S/ 3500</td>
-              <td style={tdStyle}>INGRESO</td>
-            </tr>
-
+            {datos?.gastos_por_categoria?.length ? (
+              datos.gastos_por_categoria.map((item, index) => (
+                <tr key={index}>
+                  <td style={tdStyle}>{item.nombre}</td>
+                  <td style={tdStyle}>S/ {item.totalGastado}</td>
+                  <td style={tdStyle}>GASTO</td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td
+                  colSpan="3"
+                  style={{
+                    padding: "20px",
+                    textAlign: "center",
+                  }}
+                >
+                  No hay datos para mostrar
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }
 
 const cardStyle = {
-  backgroundColor: "white",
+  backgroundColor: "var(--surface-0)",
   padding: "20px",
   borderRadius: "12px",
   width: "220px",
@@ -251,7 +283,7 @@ const cardStyle = {
 };
 
 const chartContainer = {
-  backgroundColor: "white",
+  backgroundColor: "var(--surface-0)",
   padding: "20px",
   borderRadius: "12px",
   width: "500px",
@@ -268,4 +300,3 @@ const tdStyle = {
 };
 
 export default Reportes;
-
