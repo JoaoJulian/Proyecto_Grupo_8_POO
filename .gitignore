@@ -3,6 +3,10 @@
 **/.idea/
 *.iml
 
+# Maven / Java
+target/
+**/target/
+
 # Node / frontend
 node_modules/
 dist/

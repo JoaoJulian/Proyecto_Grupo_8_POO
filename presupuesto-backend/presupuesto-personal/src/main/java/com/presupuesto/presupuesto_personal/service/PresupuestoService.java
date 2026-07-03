@@ -148,9 +148,21 @@ public class PresupuestoService {
                 .idUsuario(p.getCategoria().getUsuario().getId())
                 .build();
 
+        LocalDate inicio = LocalDate.of(p.getAnio(), p.getMes(), 1);
+        LocalDate fin = inicio.withDayOfMonth(inicio.lengthOfMonth());
+
+        BigDecimal gastoActual = transaccionRepository.sumarMontoPorUsuarioCategoriaYFechas(
+                p.getUsuario().getId(),
+                p.getCategoria().getId(),
+                TipoTransaccion.GASTO,
+                inicio,
+                fin
+        );
+
         return PresupuestoResponseDTO.builder()
                 .id(p.getId())
                 .montoMaximo(p.getMontoMaximo())
+                .gastoActual(gastoActual)
                 .mes(p.getMes())
                 .anio(p.getAnio())
                 .alertaActivada(p.getAlertaActivada())
