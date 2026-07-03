@@ -12,9 +12,12 @@
   --border: #e5e4e7;
   --border-accent: rgba(111, 75, 255, 0.3);
   --border-danger: #F7C1C1;
-  --surface-0: #f4f4f7;
-  --surface-1: #ffffff;
-  --surface-2: #f8f8fc;
+  --bg-success: #e9f7ef;
+  --text-success: #1e8449;
+  --border-success: #a9dfbf;
+  --surface-0: #ffffff;
+  --surface-1: #f4f4f7;
+  --surface-2: #eaecf0;
   --accent: #6F4BFF;
   --fill-accent: #6F4BFF;
   --on-accent: #ffffff;
