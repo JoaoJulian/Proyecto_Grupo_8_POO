@@ -10,6 +10,10 @@ export const reporteService = {
                 anio
             }
         });
+    },
+
+    obtenerTransacciones(idUsuario) {
+        return api.get(`/transacciones/usuario/${idUsuario}`);
     }
 
 };
