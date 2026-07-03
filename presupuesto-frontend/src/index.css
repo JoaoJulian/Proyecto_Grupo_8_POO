@@ -1,12 +1,25 @@
 :root {
   --text: #6b6375;
   --text-h: #08060d;
-  --bg: #fff;
+  --text-primary: #22222b;
+  --text-secondary: #585662;
+  --text-muted: #7a7a91;
+  --text-accent: #ffffff;
+  --text-danger: #A32D2D;
+  --bg: #ffffff;
+  --bg-accent: rgba(111, 75, 255, 0.12);
+  --bg-danger: #FCEBEB;
   --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
+  --border-accent: rgba(111, 75, 255, 0.3);
+  --border-danger: #F7C1C1;
+  --surface-0: #f4f4f7;
+  --surface-1: #ffffff;
+  --surface-2: #f8f8fc;
+  --accent: #6F4BFF;
+  --fill-accent: #6F4BFF;
+  --on-accent: #ffffff;
+  --accent-bg: rgba(111, 75, 255, 0.12);
+  --accent-border: rgba(111, 75, 255, 0.3);
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;

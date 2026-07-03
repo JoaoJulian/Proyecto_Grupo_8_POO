@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
+import { useAuth } from "../context/useAuth";
 
 // ============================================================
 // MOCK DATA — reemplaza esto cuando B termine los servicios
@@ -74,19 +74,24 @@ const MESES = [
 
 function porcentaje(gastado, maximo) {
   if (!maximo || maximo === 0) return 0;
+  return Math.round((gastado / maximo) * 100);
+}
+
+function anchoBarra(gastado, maximo) {
+  if (!maximo || maximo === 0) return 0;
   return Math.min(Math.round((gastado / maximo) * 100), 100);
 }
 
 function colorBarra(pct) {
-  if (pct >= 100) return "#E24B4A";   // rojo — superado
-  if (pct >= 80) return "#EF9F27";    // ámbar — advertencia
-  return "#1D9E75";                   // verde — OK
+  if (pct >= 100) return "var(--text-danger)";
+  if (pct >= 75) return "#F39C12";
+  return "var(--fill-accent)";
 }
 
 function colorBadge(pct) {
-  if (pct >= 100) return { bg: "#FCEBEB", color: "#A32D2D" };
-  if (pct >= 80)  return { bg: "#FAEEDA", color: "#854F0B" };
-  return { bg: "#E1F5EE", color: "#0F6E56" };
+  if (pct >= 100) return { bg: "var(--bg-danger)", color: "var(--text-danger)" };
+  if (pct >= 75) return { bg: "#FEF4DD", color: "#825A0C" };
+  return { bg: "var(--accent-bg)", color: "var(--accent)" };
 }
 
 function formatMes(mes, anio) {
@@ -98,31 +103,46 @@ function formatMes(mes, anio) {
 // ============================================================
 function BarraProgreso({ gastado, maximo }) {
   const pct = porcentaje(gastado, maximo);
+  const width = anchoBarra(gastado, maximo);
   const { bg, color } = colorBadge(pct);
+  const excedido = maximo > 0 && pct >= 100;
+  const tieneLimite = maximo && maximo > 0;
+
   return (
     <div>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
         <span style={{ fontSize: 13, color: "var(--text-secondary)" }}>
-          S/. {gastado.toLocaleString()} de S/. {maximo.toLocaleString()}
+          {tieneLimite
+            ? `S/. ${gastado.toLocaleString()} de S/. ${maximo.toLocaleString()}`
+            : "Sin límite definido"}
         </span>
         <span style={{
           fontSize: 12, fontWeight: 500, padding: "2px 8px",
           borderRadius: 20, background: bg, color,
+          display: "inline-flex", alignItems: "center", gap: 6,
         }}>
-          {pct}%
+          {tieneLimite ? `${pct}%` : "0%"}
+          {excedido && <span style={{ fontSize: 14 }}>⚠️</span>}
         </span>
       </div>
-      <div style={{
-        width: "100%", height: 8, borderRadius: 4,
-        background: "var(--surface-0)", overflow: "hidden",
-      }}>
+
+      {tieneLimite ? (
         <div style={{
-          width: `${pct}%`, height: "100%",
-          borderRadius: 4,
-          background: colorBarra(pct),
-          transition: "width 0.5s ease",
-        }} />
-      </div>
+          width: "100%", height: 8, borderRadius: 4,
+          background: "var(--surface-0)", overflow: "hidden",
+        }}>
+          <div style={{
+            width: `${width}%`, height: "100%",
+            borderRadius: 4,
+            background: colorBarra(pct),
+            transition: "width 0.5s ease",
+          }} />
+        </div>
+      ) : (
+        <p style={{ margin: 0, fontSize: 13, color: "var(--text-muted)" }}>
+          No se puede mostrar la barra sin un límite establecido.
+        </p>
+      )}
     </div>
   );
 }
@@ -396,14 +416,14 @@ function PanelAlertas({ alertas, onMarcarLeida }) {
         textAlign: "center", border: "0.5px solid var(--border)",
       }}>
         <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 14 }}>
-          Sin alertas por ahora. ¡Todo está dentro del presupuesto!
+          ✅ Todo en orden — no tienes alertas activas este mes.
         </p>
       </div>
     );
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
       {sinLeer.length > 0 && (
         <p style={{ margin: "0 0 4px", fontSize: 13, fontWeight: 500, color: "var(--text-secondary)" }}>
           Sin leer ({sinLeer.length})
@@ -412,24 +432,32 @@ function PanelAlertas({ alertas, onMarcarLeida }) {
       {sinLeer.map(alerta => (
         <div key={alerta.id} style={{
           background: "var(--bg-danger)", border: "0.5px solid var(--border-danger)",
-          borderRadius: 10, padding: "12px 14px",
+          borderRadius: 10, padding: "14px 16px",
           display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: 12,
         }}>
-          <div style={{ flex: 1 }}>
-            <p style={{ margin: 0, fontWeight: 500, fontSize: 14, color: "var(--text-danger)" }}>
-              {alerta.mensaje}
-            </p>
-            <p style={{ margin: "4px 0 0", fontSize: 12, color: "var(--text-muted)" }}>
-              Gastado: S/. {Number(alerta.montoGastado).toLocaleString()} / 
-              Límite: S/. {Number(alerta.montoLimite).toLocaleString()}
-              {" · "}
-              {new Date(alerta.fechaAlerta).toLocaleDateString("es-PE")}
-            </p>
+          <div style={{ flex: 1, display: "flex", gap: 10 }}>
+            <span style={{ fontSize: 20, lineHeight: 1, marginTop: 2 }}>⚠️</span>
+            <div>
+              <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
+                {alerta.presupuesto?.categoria?.nombre || "Categoría"}
+              </p>
+              <p style={{ margin: "4px 0 0", fontWeight: 600, fontSize: 14, color: "var(--text-danger)" }}>
+                {alerta.mensaje}
+              </p>
+              <p style={{ margin: "6px 0 0", fontSize: 12, color: "var(--text-muted)" }}>
+                Gastado: S/. {Number(alerta.montoGastado).toLocaleString()} / 
+                Límite: S/. {Number(alerta.montoLimite).toLocaleString()}
+              </p>
+              <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-muted)" }}>
+                {new Date(alerta.fechaAlerta).toLocaleDateString("es-PE")}
+              </p>
+            </div>
           </div>
+
           <button
             onClick={() => onMarcarLeida(alerta.id)}
             style={{
-              fontSize: 12, padding: "4px 10px", borderRadius: 5, cursor: "pointer", whiteSpace: "nowrap",
+              fontSize: 12, padding: "6px 12px", borderRadius: 8, cursor: "pointer", whiteSpace: "nowrap",
               background: "var(--surface-2)", color: "var(--text-secondary)",
               border: "0.5px solid var(--border)",
             }}
@@ -447,12 +475,15 @@ function PanelAlertas({ alertas, onMarcarLeida }) {
           {leidas.map(alerta => (
             <div key={alerta.id} style={{
               background: "var(--surface-1)", border: "0.5px solid var(--border)",
-              borderRadius: 10, padding: "10px 14px", opacity: 0.6,
+              borderRadius: 10, padding: "12px 14px", opacity: 0.75,
             }}>
-              <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>
+              <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
+                {alerta.presupuesto?.categoria?.nombre || "Categoría"}
+              </p>
+              <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-muted)" }}>
                 {alerta.mensaje}
               </p>
-              <p style={{ margin: "2px 0 0", fontSize: 11, color: "var(--text-muted)" }}>
+              <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-muted)" }}>
                 {new Date(alerta.fechaAlerta).toLocaleDateString("es-PE")}
               </p>
             </div>
@@ -484,7 +515,7 @@ export default function PresupuestosAlertas() {
   // -------------------------------------------------------
   // Crear / editar presupuesto
   // -------------------------------------------------------
-  async function handleGuardar(form, idEditar) {
+ async function handleGuardar(form, idEditar) {
     const payload = {
       montoMaximo: Number(form.montoMaximo),
       mes: Number(form.mes),
@@ -493,14 +524,25 @@ export default function PresupuestosAlertas() {
       categoria: { id: Number(form.categoriaId) },
     };
 
-    // --- CON MOCK ---
     if (idEditar) {
+      // 1. Encuentra el presupuesto viejo y combínalo con los datos nuevos
+      const presupuestoViejo = presupuestos.find(p => p.id === idEditar);
+      const presupuestoActualizado = { 
+        ...presupuestoViejo, 
+        ...payload, 
+        categoria: categorias.find(c => c.id === payload.categoria.id) 
+      };
+
+      // 2. Actualiza el estado con el objeto que ya calculamos
       setPresupuestos(prev => prev.map(p =>
-        p.id === idEditar
-          ? { ...p, ...payload, categoria: categorias.find(c => c.id === payload.categoria.id) }
-          : p
+        p.id === idEditar ? presupuestoActualizado : p
       ));
+      
       mostrarNotificacion("exito", "Presupuesto actualizado.");
+
+      // 3. ¡AQUÍ ESTÁ LA MAGIA! Pasa el objeto actualizado directamente
+      handleVerificarAlerta(presupuestoActualizado); 
+
     } else {
       const nuevo = {
         ...payload,
@@ -511,8 +553,10 @@ export default function PresupuestosAlertas() {
       };
       setPresupuestos(prev => [...prev, nuevo]);
       mostrarNotificacion("exito", "Presupuesto creado.");
+      
+      // Si quieres verificar al crear (aunque gastado será 0):
+      // handleVerificarAlerta(nuevo);
     }
-
     // --- CON API REAL (descomenta cuando B termine) ---
     // try {
     //   if (idEditar) {
@@ -554,18 +598,20 @@ export default function PresupuestosAlertas() {
   // -------------------------------------------------------
   // Verificar alerta (RF5)
   // -------------------------------------------------------
-  async function handleVerificarAlerta(presupuestoId) {
-    // --- CON MOCK ---
-    const p = presupuestos.find(x => x.id === presupuestoId);
-    const superado = p.gastadoActual > p.montoMaximo;
+ // Cambiamos el parámetro para que reciba el objeto (p) en lugar del ID
+async function handleVerificarAlerta(p) {
+    const gastado = Number(p.gastadoActual);
+    const maximo = Number(p.montoMaximo);
+    const superado = gastado > maximo;
+
     if (superado) {
       const nuevaAlerta = {
         id: Date.now(),
         mensaje: `Superaste el presupuesto de ${p.categoria.nombre}`,
-        montoGastado: p.gastadoActual,
-        montoLimite: p.montoMaximo,
+        montoGastado: gastado,
+        montoLimite: maximo,
         fechaAlerta: new Date().toISOString(),
-        leida: false,
+        leida: false, 
         presupuesto: p,
         usuario: { id: USUARIO_ID },
       };
@@ -573,7 +619,11 @@ export default function PresupuestosAlertas() {
       mostrarNotificacion("error", `¡Alerta! Superaste el presupuesto de ${p.categoria.nombre}.`);
       setTab("alertas");
     } else {
-      mostrarNotificacion("exito", "Todo bien, estás dentro del límite.");
+      // SI TODO ESTÁ BIEN: No creamos ninguna alerta. 
+      // Solo limpiamos las alertas rojas anteriores de este presupuesto específico.
+      setAlertas(prev => prev.filter(a => a.presupuesto.id !== p.id));
+
+  mostrarNotificacion("exito", "Todo bien, estás dentro del límite.");
     }
 
     // --- CON API REAL ---
@@ -723,9 +773,62 @@ export default function PresupuestosAlertas() {
         </>
       )}
 
-      {tab === "alertas" && (
-        <PanelAlertas alertas={alertas} onMarcarLeida={handleMarcarLeida} />
-      )}
+    {tab === "alertas" && (
+  <div>
+    {(() => {
+      // Separamos las alertas en dos grupos
+      const activas = alertas.filter(a => !a.leida);
+      const leidas = alertas.filter(a => a.leida);
+
+      return (
+        <>
+          {/* 1. ALERTAS ACTIVAS O MENSAJE DE ÉXITO */}
+          {activas.length > 0 ? (
+            // Si hay alertas activas, mostramos el panel. 
+            // IMPORTANTE: Le pasamos 'activas' en lugar de 'alertas' para que no duplique.
+            <PanelAlertas alertas={activas} onMarcarLeida={handleMarcarLeida} />
+          ) : (
+            // Si no hay activas, mostramos el mensaje de que todo está en orden
+            <div style={{
+              background: "var(--surface-1)", border: "1px solid var(--border)",
+              borderRadius: 10, padding: "16px", marginBottom: "16px", textAlign: "center"
+            }}>
+              <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", fontWeight: 500 }}>
+                ✅ Todo en orden — no tienes alertas activas este mes.
+              </p>
+            </div>
+          )}
+
+          {/* 2. HISTORIAL (Escrito una sola vez) */}
+          {leidas.length > 0 && (
+            <>
+              <p style={{ margin: "16px 0 8px", fontSize: 13, color: "var(--text-muted)" }}>
+                Historial ({leidas.length})
+              </p>
+              
+              {leidas.map(alerta => (
+                <div key={alerta.id} style={{
+                  background: "var(--surface-1)", border: "0.5px solid var(--border)",
+                  borderRadius: 10, padding: "12px 14px", opacity: 0.75, marginBottom: "8px"
+                }}>
+                  <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
+                    {alerta.presupuesto?.categoria?.nombre || "Categoría"}
+                  </p>
+                  <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-muted)" }}>
+                    {alerta.mensaje}
+                  </p>
+                  <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-muted)" }}>
+                    {new Date(alerta.fechaAlerta).toLocaleDateString("es-PE")}
+                  </p>
+                </div>
+              ))}
+            </>
+          )}
+        </>
+      );
+    })()}
+  </div>
+)}
 
       {/* Modal */}
       {modalAbierto && (
