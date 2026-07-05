@@ -39,13 +39,22 @@ public class ReporteService {
 
         BigDecimal saldoNeto = totalIngresos.subtract(totalGastos);
 
-        Map<String, BigDecimal> gastosPorCategoria = new HashMap<>();
+        Map<String, BigDecimal> gastosPorCategoriaMap = new HashMap<>();
         transacciones.stream()
                 .filter(t -> t.getTipo() == TipoTransaccion.GASTO && t.getCategoria() != null)
                 .forEach(t -> {
                     String nombreCategoria = t.getCategoria().getNombre();
-                    gastosPorCategoria.merge(nombreCategoria, t.getMonto(), BigDecimal::add);
+                    gastosPorCategoriaMap.merge(nombreCategoria, t.getMonto(), BigDecimal::add);
                 });
+// El frontend espera un ARRAY de objetos {nombre, totalGastado}, no un objeto {categoria: monto}
+        List<Map<String, Object>> gastosPorCategoria = gastosPorCategoriaMap.entrySet().stream()
+                .map(entry -> {
+                    Map<String, Object> item = new HashMap<>();
+                    item.put("nombre", entry.getKey());
+                    item.put("totalGastado", entry.getValue());
+                    return item;
+                })
+                .toList();
 
         Map<String, Object> reporte = new HashMap<>();
         reporte.put("usuario_id", idUsuario);

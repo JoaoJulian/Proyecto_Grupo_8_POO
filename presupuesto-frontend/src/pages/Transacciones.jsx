@@ -114,7 +114,7 @@ export default function Transacciones() {
       await transaccionService.crear({
         idUsuario: usuario.id,
         tipo: form.tipo,
-        fecha: form.fecha,
+        fechaTransaccion: form.fecha,
         monto: Number(form.monto),
         idCategoria: Number(form.idCategoria),
         descripcion: form.descripcion,

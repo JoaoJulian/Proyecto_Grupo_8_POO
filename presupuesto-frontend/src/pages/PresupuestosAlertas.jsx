@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/useAuth";
+import { presupuestoService } from "../services/presupuestoService";
+import { categoriaService } from "../services/categoriaService";
+import { alertaService } from "../services/alertaService";
 
 // ============================================================
 // MOCK DATA — reemplaza esto cuando B termine los servicios
@@ -467,29 +470,19 @@ function PanelAlertas({ alertas, onMarcarLeida }) {
         </div>
       ))}
 
-      {leidas.length > 0 && (
-        <>
-          <p style={{ margin: "8px 0 4px", fontSize: 13, color: "var(--text-muted)" }}>
-            Historial ({leidas.length})
-          </p>
-          {leidas.map(alerta => (
-            <div key={alerta.id} style={{
-              background: "var(--surface-1)", border: "0.5px solid var(--border)",
-              borderRadius: 10, padding: "12px 14px", opacity: 0.75,
-            }}>
-              <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
-                {alerta.presupuesto?.categoria?.nombre || "Categoría"}
-              </p>
-              <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-muted)" }}>
-                {alerta.mensaje}
-              </p>
-              <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-muted)" }}>
-                {new Date(alerta.fechaAlerta).toLocaleDateString("es-PE")}
-              </p>
-            </div>
-          ))}
-        </>
-      )}
+      {leidas.map(alerta => (
+  <div key={alerta.id} style={{
+    background: "var(--surface-1)", border: "0.5px solid var(--border)",
+    borderRadius: 10, padding: "12px 14px", opacity: 0.75, marginBottom: "8px"
+  }}>
+    <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
+      {alerta.mensaje}
+    </p>
+    <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-muted)" }}>
+      {new Date(alerta.fechaAlerta).toLocaleDateString("es-PE")}
+    </p>
+  </div>
+))}
     </div>
   );
 }
@@ -498,78 +491,92 @@ function PanelAlertas({ alertas, onMarcarLeida }) {
 // COMPONENTE PRINCIPAL: PresupuestosAlertas
 // ============================================================
 export default function PresupuestosAlertas() {
-  const [presupuestos, setPresupuestos] = useState(mockPresupuestos);
-  const [alertas, setAlertas] = useState(mockAlertas);
-  const [categorias] = useState(mockCategorias);
-  const [tab, setTab] = useState("presupuestos"); // "presupuestos" | "alertas"
+  const { usuario, logout } = useAuth();
+
+  const [presupuestos, setPresupuestos] = useState([]);
+  const [alertas, setAlertas] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [tab, setTab] = useState("presupuestos");
   const [modalAbierto, setModalAbierto] = useState(false);
   const [presupuestoEditar, setPresupuestoEditar] = useState(null);
-  const [notificacion, setNotificacion] = useState(null); // { tipo: "exito"|"error", texto }
-  const { logout } = useAuth();
+  const [notificacion, setNotificacion] = useState(null);
+  const [cargando, setCargando] = useState(true);
 
   function mostrarNotificacion(tipo, texto) {
     setNotificacion({ tipo, texto });
     setTimeout(() => setNotificacion(null), 3500);
   }
 
+  // Normaliza el presupuesto del backend (gastoActual) al nombre que usa el resto del componente (gastadoActual)
+  function normalizarPresupuesto(p) {
+    return { ...p, gastadoActual: Number(p.gastoActual ?? p.gastadoActual ?? 0) };
+  }
+
+  // -------------------------------------------------------
+  // Carga inicial desde la API real
+  // -------------------------------------------------------
+  useEffect(() => {
+    if (!usuario) return;
+
+    async function cargarDatos() {
+      try {
+        setCargando(true);
+        const [resCategorias, resPresupuestos, resAlertas] = await Promise.all([
+          categoriaService.listar(usuario.id),
+          presupuestoService.listar(usuario.id),
+          alertaService.listarPorUsuario(usuario.id),
+        ]);
+
+        setCategorias(resCategorias.data?.length ? resCategorias.data : mockCategorias);
+        setPresupuestos((resPresupuestos.data || []).map(normalizarPresupuesto));
+        setAlertas(resAlertas.data || []);
+      } catch (e) {
+        console.error("No se pudo conectar con la API, usando datos mock:", e);
+        setCategorias(mockCategorias);
+        setPresupuestos(mockPresupuestos);
+        setAlertas(mockAlertas);
+      } finally {
+        setCargando(false);
+      }
+    }
+
+    cargarDatos();
+  }, [usuario]);
+
   // -------------------------------------------------------
   // Crear / editar presupuesto
   // -------------------------------------------------------
- async function handleGuardar(form, idEditar) {
+  async function handleGuardar(form, idEditar) {
     const payload = {
       montoMaximo: Number(form.montoMaximo),
       mes: Number(form.mes),
       anio: Number(form.anio),
-      usuario: { id: USUARIO_ID },
-      categoria: { id: Number(form.categoriaId) },
+      idCategoria: Number(form.categoriaId), // el backend espera idCategoria plano, NO {categoria:{id}}
     };
 
-    if (idEditar) {
-      // 1. Encuentra el presupuesto viejo y combínalo con los datos nuevos
-      const presupuestoViejo = presupuestos.find(p => p.id === idEditar);
-      const presupuestoActualizado = { 
-        ...presupuestoViejo, 
-        ...payload, 
-        categoria: categorias.find(c => c.id === payload.categoria.id) 
-      };
+    try {
+      if (idEditar) {
+        await presupuestoService.actualizar(idEditar, payload);
+        mostrarNotificacion("exito", "Presupuesto actualizado.");
+      } else {
+        await presupuestoService.crear(payload);
+        mostrarNotificacion("exito", "Presupuesto creado.");
+      }
 
-      // 2. Actualiza el estado con el objeto que ya calculamos
-      setPresupuestos(prev => prev.map(p =>
-        p.id === idEditar ? presupuestoActualizado : p
-      ));
-      
-      mostrarNotificacion("exito", "Presupuesto actualizado.");
+      const actualizados = await presupuestoService.listar(usuario.id);
+      const listaNormalizada = actualizados.data.map(normalizarPresupuesto);
+      setPresupuestos(listaNormalizada);
 
-      // 3. ¡AQUÍ ESTÁ LA MAGIA! Pasa el objeto actualizado directamente
-      handleVerificarAlerta(presupuestoActualizado); 
-
-    } else {
-      const nuevo = {
-        ...payload,
-        id: Date.now(),
-        alertaActivada: false,
-        gastadoActual: 0,
-        categoria: categorias.find(c => c.id === payload.categoria.id),
-      };
-      setPresupuestos(prev => [...prev, nuevo]);
-      mostrarNotificacion("exito", "Presupuesto creado.");
-      
-      // Si quieres verificar al crear (aunque gastado será 0):
-      // handleVerificarAlerta(nuevo);
+      // Verificamos alerta para la categoría/mes/año que se acaba de guardar
+      const categoriaId = Number(form.categoriaId);
+      await handleVerificarAlerta({
+        categoria: { id: categoriaId, nombre: categorias.find(c => c.id === categoriaId)?.nombre },
+        mes: Number(form.mes),
+        anio: Number(form.anio),
+      });
+    } catch (e) {
+      mostrarNotificacion("error", e.response?.data || "Error al guardar el presupuesto.");
     }
-    // --- CON API REAL (descomenta cuando B termine) ---
-    // try {
-    //   if (idEditar) {
-    //     await presupuestoService.actualizar(idEditar, payload);
-    //   } else {
-    //     await presupuestoService.crear(payload);
-    //   }
-    //   const actualizados = await presupuestoService.listarPorUsuario(USUARIO_ID);
-    //   setPresupuestos(actualizados);
-    //   mostrarNotificacion("exito", idEditar ? "Presupuesto actualizado." : "Presupuesto creado.");
-    // } catch (e) {
-    //   mostrarNotificacion("error", e.response?.data || "Error al guardar.");
-    // }
 
     setModalAbierto(false);
     setPresupuestoEditar(null);
@@ -581,136 +588,77 @@ export default function PresupuestosAlertas() {
   async function handleEliminar(id) {
     if (!window.confirm("¿Eliminar este presupuesto?")) return;
 
-    // --- CON MOCK ---
-    setPresupuestos(prev => prev.filter(p => p.id !== id));
-    mostrarNotificacion("exito", "Presupuesto eliminado.");
-
-    // --- CON API REAL ---
-    // try {
-    //   await presupuestoService.eliminar(id);
-    //   setPresupuestos(prev => prev.filter(p => p.id !== id));
-    //   mostrarNotificacion("exito", "Presupuesto eliminado.");
-    // } catch {
-    //   mostrarNotificacion("error", "No se pudo eliminar.");
-    // }
+    try {
+      await presupuestoService.eliminar(id);
+      setPresupuestos(prev => prev.filter(p => p.id !== id));
+      mostrarNotificacion("exito", "Presupuesto eliminado.");
+    } catch {
+      mostrarNotificacion("error", "No se pudo eliminar. Revisa la consola/CORS.");
+    }
   }
 
   // -------------------------------------------------------
   // Verificar alerta (RF5)
+  // p necesita: categoria.id, mes, anio
   // -------------------------------------------------------
- // Cambiamos el parámetro para que reciba el objeto (p) en lugar del ID
-async function handleVerificarAlerta(p) {
-    const gastado = Number(p.gastadoActual);
-    const maximo = Number(p.montoMaximo);
-    const superado = gastado > maximo;
+  async function handleVerificarAlerta(p) {
+    try {
+      const res = await presupuestoService.verificarAlerta(
+        usuario.id,
+        p.categoria.id,
+        p.mes,
+        p.anio
+      );
+      const resultado = res.data; // string: "ALERTA: ..." o "Dentro del presupuesto..."
 
-    if (superado) {
-      const nuevaAlerta = {
-        id: Date.now(),
-        mensaje: `Superaste el presupuesto de ${p.categoria.nombre}`,
-        montoGastado: gastado,
-        montoLimite: maximo,
-        fechaAlerta: new Date().toISOString(),
-        leida: false, 
-        presupuesto: p,
-        usuario: { id: USUARIO_ID },
-      };
-      setAlertas(prev => [nuevaAlerta, ...prev]);
-      mostrarNotificacion("error", `¡Alerta! Superaste el presupuesto de ${p.categoria.nombre}.`);
-      setTab("alertas");
-    } else {
-      // SI TODO ESTÁ BIEN: No creamos ninguna alerta. 
-      // Solo limpiamos las alertas rojas anteriores de este presupuesto específico.
-      setAlertas(prev => prev.filter(a => a.presupuesto.id !== p.id));
+      const alertasActualizadas = await alertaService.listarPorUsuario(usuario.id);
+      setAlertas(alertasActualizadas.data || []);
 
-  mostrarNotificacion("exito", "Todo bien, estás dentro del límite.");
+      if (resultado.startsWith("ALERTA")) {
+        mostrarNotificacion("error", resultado);
+        setTab("alertas");
+      } else {
+        mostrarNotificacion("exito", "Dentro del presupuesto.");
+      }
+    } catch (e) {
+      mostrarNotificacion("error", "Error al verificar alerta.");
     }
-
-    // --- CON API REAL ---
-    // try {
-    //   const resultado = await presupuestoService.verificarAlerta(presupuestoId);
-    //   const alertasActualizadas = await alertaService.listarPorUsuario(USUARIO_ID);
-    //   setAlertas(alertasActualizadas);
-    //   if (resultado.startsWith("ALERTA")) {
-    //     mostrarNotificacion("error", resultado);
-    //     setTab("alertas");
-    //   } else {
-    //     mostrarNotificacion("exito", "Dentro del presupuesto.");
-    //   }
-    // } catch {
-    //   mostrarNotificacion("error", "Error al verificar alerta.");
-    // }
   }
 
   // -------------------------------------------------------
   // Marcar alerta como leída
   // -------------------------------------------------------
   async function handleMarcarLeida(alertaId) {
-    // --- CON MOCK ---
-    setAlertas(prev => prev.map(a => a.id === alertaId ? { ...a, leida: true } : a));
-
-    // --- CON API REAL ---
-    // try {
-    //   await alertaService.marcarComoLeida(alertaId);
-    //   setAlertas(prev => prev.map(a => a.id === alertaId ? { ...a, leida: true } : a));
-    // } catch {
-    //   mostrarNotificacion("error", "No se pudo actualizar la alerta.");
-    // }
+    try {
+      await alertaService.marcarComoLeida(alertaId);
+      setAlertas(prev => prev.map(a => a.id === alertaId ? { ...a, leida: true } : a));
+    } catch {
+      mostrarNotificacion("error", "No se pudo actualizar la alerta.");
+    }
   }
 
   // -------------------------------------------------------
-  // Filtro por mes actual
+  // Render
   // -------------------------------------------------------
-  const mesActual = new Date().getMonth() + 1;
-  const anioActual = new Date().getFullYear();
-  const presupuestosMesActual = presupuestos.filter(
-    p => p.mes === mesActual && p.anio === anioActual
-  );
-  const alertasNoLeidas = alertas.filter(a => !a.leida).length;
+  if (cargando) {
+    return (
+      <div style={{ padding: "2rem" }}>
+        <p style={{ color: "var(--text-muted)" }}>Cargando presupuestos...</p>
+      </div>
+    );
+  }
 
-  // -------------------------------------------------------
-  // RENDER
-  // -------------------------------------------------------
   return (
-    <div style={{ padding: "1.5rem", maxWidth: 800, margin: "0 auto" }}>
-
-      {/* Notificación flotante */}
-      {notificacion && (
-        <div style={{
-          position: "fixed", top: 20, right: 20, zIndex: 2000,
-          padding: "12px 18px", borderRadius: 10, fontSize: 14, fontWeight: 500,
-          background: notificacion.tipo === "exito" ? "#E1F5EE" : "#FCEBEB",
-          color: notificacion.tipo === "exito" ? "#0F6E56" : "#A32D2D",
-          border: `0.5px solid ${notificacion.tipo === "exito" ? "#9FE1CB" : "#F7C1C1"}`,
-          boxShadow: "0 2px 12px rgba(0,0,0,0.1)",
-        }}>
-          {notificacion.texto}
-        </div>
-      )}
-
-      {/* Encabezado */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 24 }}>
-        <div>
-          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 500, color: "var(--text-primary)" }}>
-            Presupuestos y alertas
-          </h1>
-          <p style={{ margin: "4px 0 0", fontSize: 14, color: "var(--text-muted)" }}>
-            {formatMes(mesActual, anioActual)} · {presupuestosMesActual.length} presupuestos activos
-          </p>
-        </div>
-        <button
-          onClick={logout}
-          style={{
-            padding: "9px 18px", borderRadius: 8, cursor: "pointer", fontSize: 14,
-            background: "none", color: "var(--text)", border: "1px solid var(--border)",
-          }}
-        >
-          Cerrar sesión
-        </button>
+    <div style={{ padding: "1.5rem", display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* Header */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <h1 style={{ margin: 0, fontSize: 22, fontWeight: 600, color: "var(--text-primary)" }}>
+          Gestión de Presupuestos
+        </h1>
         <button
           onClick={() => { setPresupuestoEditar(null); setModalAbierto(true); }}
           style={{
-            padding: "9px 18px", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 500,
+            padding: "8px 16px", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 500,
             background: "var(--fill-accent)", color: "var(--on-accent)", border: "none",
           }}
         >
@@ -718,119 +666,78 @@ async function handleVerificarAlerta(p) {
         </button>
       </div>
 
-      {/* Tabs */}
-      <div style={{ display: "flex", gap: 0, marginBottom: 20, borderBottom: "0.5px solid var(--border)" }}>
-        {[
-          { key: "presupuestos", label: "Presupuestos" },
-          { key: "alertas", label: `Alertas${alertasNoLeidas > 0 ? ` (${alertasNoLeidas})` : ""}` },
-        ].map(t => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            style={{
-              padding: "10px 18px", fontSize: 14, cursor: "pointer",
-              background: "none", border: "none",
-              borderBottom: tab === t.key ? "2px solid var(--fill-accent)" : "2px solid transparent",
-              color: tab === t.key ? "var(--text-accent)" : "var(--text-secondary)",
-              fontWeight: tab === t.key ? 500 : 400,
-              transition: "all 0.15s",
-            }}
-          >
-            {t.label}
-          </button>
-        ))}
-      </div>
-
-      {/* Contenido */}
-      {tab === "presupuestos" && (
-        <>
-          {presupuestos.length === 0 ? (
-            <div style={{
-              background: "var(--surface-1)", borderRadius: 12, padding: "3rem",
-              textAlign: "center", border: "0.5px solid var(--border)",
-            }}>
-              <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 15 }}>
-                Aún no tienes presupuestos. Crea uno para empezar a controlar tus gastos.
-              </p>
-            </div>
-          ) : (
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-              gap: 14,
-            }}>
-              {presupuestos.map(p => (
-                <TarjetaPresupuesto
-                  key={p.id}
-                  presupuesto={p}
-                  onEditar={(pres) => { setPresupuestoEditar(pres); setModalAbierto(true); }}
-                  onEliminar={handleEliminar}
-                  onVerificarAlerta={handleVerificarAlerta}
-                />
-              ))}
-            </div>
-          )}
-        </>
+      {/* Notificación */}
+      {notificacion && (
+        <div style={{
+          padding: "10px 14px", borderRadius: 8, fontSize: 13,
+          background: notificacion.tipo === "error" ? "var(--bg-danger)" : "var(--bg-accent)",
+          color: notificacion.tipo === "error" ? "var(--text-danger)" : "var(--text-accent)",
+          border: notificacion.tipo === "error" ? "0.5px solid var(--border-danger)" : "0.5px solid var(--border-accent)",
+        }}>
+          {notificacion.texto}
+        </div>
       )}
 
-    {tab === "alertas" && (
-  <div>
-    {(() => {
-      // Separamos las alertas en dos grupos
-      const activas = alertas.filter(a => !a.leida);
-      const leidas = alertas.filter(a => a.leida);
+      {/* Tabs */}
+      <div style={{ display: "flex", gap: 8, borderBottom: "1px solid var(--border)" }}>
+        <button
+          onClick={() => setTab("presupuestos")}
+          style={{
+            padding: "8px 16px", border: "none", background: "none", cursor: "pointer",
+            fontSize: 14, fontWeight: 500,
+            color: tab === "presupuestos" ? "var(--fill-accent)" : "var(--text-muted)",
+            borderBottom: tab === "presupuestos" ? "2px solid var(--fill-accent)" : "2px solid transparent",
+          }}
+        >
+          Presupuestos
+        </button>
+        <button
+          onClick={() => setTab("alertas")}
+          style={{
+            padding: "8px 16px", border: "none", background: "none", cursor: "pointer",
+            fontSize: 14, fontWeight: 500,
+            color: tab === "alertas" ? "var(--fill-accent)" : "var(--text-muted)",
+            borderBottom: tab === "alertas" ? "2px solid var(--fill-accent)" : "2px solid transparent",
+          }}
+        >
+          Alertas {alertas.filter(a => !a.leida).length > 0 && `(${alertas.filter(a => !a.leida).length})`}
+        </button>
+      </div>
 
-      return (
-        <>
-          {/* 1. ALERTAS ACTIVAS O MENSAJE DE ÉXITO */}
-          {activas.length > 0 ? (
-            // Si hay alertas activas, mostramos el panel. 
-            // IMPORTANTE: Le pasamos 'activas' en lugar de 'alertas' para que no duplique.
-            <PanelAlertas alertas={activas} onMarcarLeida={handleMarcarLeida} />
-          ) : (
-            // Si no hay activas, mostramos el mensaje de que todo está en orden
-            <div style={{
-              background: "var(--surface-1)", border: "1px solid var(--border)",
-              borderRadius: 10, padding: "16px", marginBottom: "16px", textAlign: "center"
-            }}>
-              <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", fontWeight: 500 }}>
-                ✅ Todo en orden — no tienes alertas activas este mes.
-              </p>
-            </div>
-          )}
+      {/* Contenido de tabs */}
+      {tab === "presupuestos" ? (
+        presupuestos.length === 0 ? (
+          <div style={{
+            background: "var(--surface-1)", borderRadius: 12, padding: "2rem",
+            textAlign: "center", border: "0.5px solid var(--border)",
+          }}>
+            <p style={{ margin: 0, color: "var(--text-muted)", fontSize: 14 }}>
+              Todavía no tienes presupuestos creados. Usa "+ Nuevo presupuesto" para empezar.
+            </p>
+          </div>
+        ) : (
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16,
+          }}>
+            {presupuestos.map(p => (
+              <TarjetaPresupuesto
+                key={p.id}
+                presupuesto={p}
+                onEditar={(pres) => { setPresupuestoEditar(pres); setModalAbierto(true); }}
+                onEliminar={handleEliminar}
+                onVerificarAlerta={(id) => {
+                  const pres = presupuestos.find(x => x.id === id);
+                  if (pres) handleVerificarAlerta(pres);
+                }}
+              />
+            ))}
+          </div>
+        )
+      ) : (
+        <PanelAlertas alertas={alertas} onMarcarLeida={handleMarcarLeida} />
+      )}
 
-          {/* 2. HISTORIAL (Escrito una sola vez) */}
-          {leidas.length > 0 && (
-            <>
-              <p style={{ margin: "16px 0 8px", fontSize: 13, color: "var(--text-muted)" }}>
-                Historial ({leidas.length})
-              </p>
-              
-              {leidas.map(alerta => (
-                <div key={alerta.id} style={{
-                  background: "var(--surface-1)", border: "0.5px solid var(--border)",
-                  borderRadius: 10, padding: "12px 14px", opacity: 0.75, marginBottom: "8px"
-                }}>
-                  <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
-                    {alerta.presupuesto?.categoria?.nombre || "Categoría"}
-                  </p>
-                  <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-muted)" }}>
-                    {alerta.mensaje}
-                  </p>
-                  <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-muted)" }}>
-                    {new Date(alerta.fechaAlerta).toLocaleDateString("es-PE")}
-                  </p>
-                </div>
-              ))}
-            </>
-          )}
-        </>
-      );
-    })()}
-  </div>
-)}
-
-      {/* Modal */}
+      {/* Modal crear/editar */}
       {modalAbierto && (
         <ModalPresupuesto
           presupuesto={presupuestoEditar}

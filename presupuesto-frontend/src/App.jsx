@@ -8,6 +8,9 @@ import ResetPasswordPage from "./pages/ResetPasswordPage";
 import Layout from "./components/Layout"; 
 import Dashboard from "./pages/Dashboard";
 import Transacciones from "./pages/Transacciones";
+import Categorias from "./pages/Categorias";
+import Grupos from "./pages/Grupos";
+import Bitacora from "./pages/Bitacora";
 import PresupuestosAlertas from "./pages/PresupuestosAlertas"; 
 import Reportes from "./pages/Reportes";
 
@@ -26,6 +29,9 @@ function App() {
           <Route element={<PrivateRoute><Layout /></PrivateRoute>}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/transacciones" element={<Transacciones />} />
+            <Route path="/categorias" element={<Categorias />} />
+            <Route path="/grupos" element={<Grupos />} />
+            <Route path="/bitacora" element={<Bitacora />} />
             <Route path="/presupuestos" element={<PresupuestosAlertas />} />
             <Route path="/reportes" element={<Reportes />} />
             {/* Redirección raíz al dashboard */}

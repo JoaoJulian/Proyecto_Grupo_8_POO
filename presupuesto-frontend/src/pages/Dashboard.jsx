@@ -1,18 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { reporteService } from '../services/reporteService'; 
+import { reporteService } from '../services/reporteService';
+import { useAuth } from '../context/useAuth';   // ← agregar
 
 export default function Dashboard() {
+  const { usuario } = useAuth();                // ← agregar
   const [reporte, setReporte] = useState({ ingresosMes: 0, gastosMes: 0, balance: 0 });
-  const [transacciones, setTransacciones] = useState([]); 
+  const [transacciones, setTransacciones] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!usuario) return;                        // ← evita llamar sin usuario logueado
+
     async function cargarDatosDashboard() {
       try {
-        const idUsuario = 1; // Ajustado al nombre de variable de tu grupo
+        const idUsuario = usuario.id;             // ← antes: const idUsuario = 1;
         const mesActual = new Date().getMonth() + 1;
         const anioActual = new Date().getFullYear();
-
         // 1. Llamada al backend para el resumen mensual (.data porque el servicio retorna la promesa de Axios)
         const responseReporte = await reporteService.obtenerMensual(idUsuario, mesActual, anioActual);
         const dataReporte = responseReporte?.data;
@@ -29,7 +32,16 @@ export default function Dashboard() {
         const dataTransacciones = responseTransacciones?.data;
 
         if (dataTransacciones) {
-          setTransacciones(dataTransacciones.slice(0, 3));
+          const delMesActual = dataTransacciones.filter((t) => {
+            const fecha = new Date(t.fechaTransaccion);
+            return fecha.getMonth() + 1 === mesActual && fecha.getFullYear() === anioActual;
+          });
+
+          const ordenadas = [...delMesActual].sort(
+              (a, b) => new Date(b.fechaTransaccion) - new Date(a.fechaTransaccion)
+          );
+
+          setTransacciones(ordenadas.slice(0, 3));
         }
 
       } catch (error) {
